@@ -1,8 +1,17 @@
+import * as path from 'path';
+import * as dotenv from 'dotenv';
 import { Rider } from './../entities/rider.entity';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Admin } from 'src/entities/admin.entity';
 import { Branch } from 'src/entities/branch.entity';
 import { Customer } from 'src/entities/customer.entity';
+
+// const env = process.env.NODE_ENV || "dev";
+const dotenv_path = path.resolve(process.cwd(), `.env`);
+const result = dotenv.config({ path: dotenv_path });
+if (result.error) {
+  console.log('ERROR: could not find dotenv_path', dotenv_path);
+}
 
 // ======= Congigiration fot postgres DB =========
 // export const typeOrmConfig: TypeOrmModuleOptions = {
@@ -17,13 +26,14 @@ import { Customer } from 'src/entities/customer.entity';
 // };
 
 // ======= Congigiration fot mysql DB =========
+
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'mysql',
   host: 'localhost',
-  port: 3306,
-  username: 'root',
-  password: undefined,
-  database: 'courier',
+  database: process.env.DB_NAME,
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  port: parseInt(process.env.DB_PORT),
   entities: [Branch, Admin, Rider, Customer],
   synchronize: true,
 };
