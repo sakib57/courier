@@ -1,8 +1,9 @@
 import { AuthCredentialsDto } from 'src/auth/dto/auth-credentials.dto';
 import { Admin } from 'src/entities/admin.entity';
-import { Repository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 import { AdminDto } from './admin.dto';
 
+@EntityRepository(Admin)
 export class AdminRepository extends Repository<Admin> {
   // Sign In Method
   async signIn(authCredentialsDto: AuthCredentialsDto): Promise<AdminDto> {

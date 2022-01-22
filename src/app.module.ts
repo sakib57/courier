@@ -4,8 +4,15 @@ import { typeOrmConfig } from './config/typeorm.config';
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
 import { BranchModule } from './branch/branch.module';
+import { TestModule } from './test/test.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(typeOrmConfig), AuthModule, AdminModule, BranchModule],
+  imports: [
+    TypeOrmModule.forRoot(typeOrmConfig),
+    AuthModule,
+    AdminModule,
+    BranchModule,
+    TestModule,
+  ],
 })
 export class AppModule {}
