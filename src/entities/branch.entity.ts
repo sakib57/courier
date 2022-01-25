@@ -7,4 +7,10 @@ export class Branch extends BaseEntity {
 
   @Column({ length: 100 })
   name: string;
+
+  @Column()
+  user_email: string;
+
+  @Column()
+  user_password: string;
 }
