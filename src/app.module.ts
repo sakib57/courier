@@ -5,6 +5,8 @@ import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
 import { BranchModule } from './branch/branch.module';
 import { AppController } from './app.controller';
+import { MarchantModule } from './marchant/marchant.module';
+import { RiderModule } from './rider/rider.module';
 
 @Module({
   imports: [
@@ -12,6 +14,8 @@ import { AppController } from './app.controller';
     AuthModule,
     AdminModule,
     BranchModule,
+    MarchantModule,
+    RiderModule,
   ],
   controllers: [AppController],
 })
