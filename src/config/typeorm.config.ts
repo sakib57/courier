@@ -6,6 +6,8 @@ import { Admin } from 'src/entities/admin.entity';
 import { Branch } from 'src/entities/branch.entity';
 import { Customer } from 'src/entities/customer.entity';
 import { District } from 'src/entities/district.entity';
+import { Upazila } from 'src/entities/upazila.entity';
+import { Merchant } from 'src/entities/merchant.entity';
 
 // const env = process.env.NODE_ENV || "dev";
 const dotenv_path = path.resolve(process.cwd(), `.env`);
@@ -35,6 +37,15 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   port: parseInt(process.env.DB_PORT),
-  entities: [Branch, Admin, Rider, Customer, District],
+  entities: [
+    Branch,
+    Admin,
+    Rider,
+    Customer,
+    District,
+    Upazila,
+    Merchant,
+    Rider,
+  ],
   synchronize: true,
 };

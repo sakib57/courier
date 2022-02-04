@@ -1,4 +1,13 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Merchant } from './merchant.entity';
 
 @Entity()
 export class Branch extends BaseEntity {
@@ -13,4 +22,13 @@ export class Branch extends BaseEntity {
 
   @Column()
   user_password: string;
+
+  @OneToMany(() => Merchant, (merchant) => merchant.branch)
+  merchants: Merchant[];
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

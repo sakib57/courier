@@ -5,7 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
 import { BranchModule } from './branch/branch.module';
 import { AppController } from './app.controller';
-import { MarchantModule } from './marchant/marchant.module';
+import { MerchantModule } from './merchant/merchant.module';
 import { RiderModule } from './rider/rider.module';
 
 @Module({
@@ -14,7 +14,7 @@ import { RiderModule } from './rider/rider.module';
     AuthModule,
     AdminModule,
     BranchModule,
-    MarchantModule,
+    MerchantModule,
     RiderModule,
   ],
   controllers: [AppController],

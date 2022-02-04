@@ -1,4 +1,11 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Upazila } from './upazila.entity';
 
 @Entity()
 export class District extends BaseEntity {
@@ -7,4 +14,7 @@ export class District extends BaseEntity {
 
   @Column({ length: 20, unique: true })
   name: string;
+
+  @OneToMany(() => Upazila, (upazila) => upazila.district)
+  upazilas: Upazila[];
 }

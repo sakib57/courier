@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { AdminRepository } from 'src/admin/admin.repository';
+import { MerchantRepository } from 'src/merchant/merchant.repository';
+import { RiderRepository } from 'src/rider/rider.repository';
 
 @Module({
   imports: [
@@ -15,7 +17,11 @@ import { AdminRepository } from 'src/admin/admin.repository';
         expiresIn: 3600,
       },
     }),
-    TypeOrmModule.forFeature([AdminRepository]),
+    TypeOrmModule.forFeature([
+      AdminRepository,
+      MerchantRepository,
+      RiderRepository,
+    ]),
   ],
   providers: [AuthService],
   controllers: [AuthController],

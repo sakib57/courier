@@ -1,19 +1,11 @@
 import {
   IsEmail,
-  IsEmpty,
   IsString,
   //   Matches,
   MinLength,
-  IsOptional,
 } from 'class-validator';
 
-export class AuthCredentialsDto {
-  @IsString()
-  @MinLength(2)
-  @IsEmpty()
-  @IsOptional()
-  name: string;
-
+export class SignInDto {
   @IsString()
   @IsEmail()
   email: string;

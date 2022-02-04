@@ -4,12 +4,15 @@ import * as bcrypt from 'bcrypt';
 import { Branch } from './branch.entity';
 
 @Entity()
-export class Rider extends User {
+export class Merchant extends User {
   @ManyToOne(() => Branch, (branch) => branch.merchants)
   @JoinColumn({
     name: 'branch_id',
   })
   branch: Branch;
+
+  @Column()
+  company_name: string;
 
   @Column({ type: 'text' })
   address: string;
@@ -18,12 +21,9 @@ export class Rider extends User {
   contact_number: string;
 
   @Column()
-  isActive: boolean;
-
-  @Column()
   salt: string;
 
-  async validateRiderPassword(password: string): Promise<boolean> {
+  async validateMerchantPassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);
     return hash === this.password;
   }

@@ -3,26 +3,68 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AdminDto } from 'src/admin/admin.dto';
 import { AdminRepository } from 'src/admin/admin.repository';
-import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { MerchantDto } from 'src/merchant/merchant.dto';
+import { MerchantRepository } from 'src/merchant/merchant.repository';
+import { RiderDto } from 'src/rider/rider.dto';
+import { RiderRepository } from 'src/rider/rider.repository';
+import { MerchantSignUpDto } from './dto/merchant-sign-up.dto';
+import { RiderSignUpDto } from './dto/rider-sign-up.dto';
+import { SignInDto } from './dto/sign-in.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(AdminRepository)
     private adminRepository: AdminRepository,
+    @InjectRepository(MerchantRepository)
+    private merchantRepository: MerchantRepository,
+    @InjectRepository(RiderRepository)
+    private riderRepository: RiderRepository,
     private jwtService: JwtService,
   ) {}
 
   // Admin Sign In method
-  async adminSignIn(authCredentialsDto: AuthCredentialsDto): Promise<AdminDto> {
-    const admin: AdminDto = await this.adminRepository.signIn(
-      authCredentialsDto,
-    );
+  async adminSignIn(signInDto: SignInDto): Promise<AdminDto> {
+    const admin: AdminDto = await this.adminRepository.signIn(signInDto);
     if (!admin) {
       throw new UnauthorizedException('Invalid Credentials');
     }
     const accessToken = await this.jwtService.sign(admin);
     admin.accessToken = accessToken;
     return admin;
+  }
+
+  // Merchant SignUp
+  async merchantSignUp(signUpDto: MerchantSignUpDto) {
+    return this.merchantRepository.signUp(signUpDto);
+  }
+
+  // Merchant SignIn
+  async merchantSignIn(signInDto: SignInDto): Promise<string> {
+    const merchant: MerchantDto =
+      await this.merchantRepository.validateMerchantPassword(signInDto);
+    if (!merchant) {
+      throw new UnauthorizedException('Invalid Credentials');
+    }
+    const accessToken = this.jwtService.sign(merchant);
+    return accessToken;
+  }
+
+  // Rider SignUp
+  async riderSignUp(signUpDto: RiderSignUpDto) {
+    console.log('rider');
+    return this.riderRepository.signUp(signUpDto);
+  }
+
+  // Rider SignIn
+  async riderSignIn(signInDto: SignInDto): Promise<string> {
+    const rider: RiderDto = await this.riderRepository.validateRiderPassword(
+      signInDto,
+    );
+    if (!rider) {
+      throw new UnauthorizedException('Invalid Credentials');
+    }
+    const accessToken = this.jwtService.sign(rider);
+    return accessToken;
   }
 }
