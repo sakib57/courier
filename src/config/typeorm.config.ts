@@ -8,6 +8,8 @@ import { Customer } from 'src/entities/customer.entity';
 import { District } from 'src/entities/district.entity';
 import { Upazila } from 'src/entities/upazila.entity';
 import { Merchant } from 'src/entities/merchant.entity';
+import { Parcel } from 'src/entities/parcel.entity';
+import { PickupParcel } from 'src/entities/pickup-parcel.entity';
 
 // const env = process.env.NODE_ENV || "dev";
 const dotenv_path = path.resolve(process.cwd(), `.env`);
@@ -46,6 +48,8 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     Upazila,
     Merchant,
     Rider,
+    Parcel,
+    PickupParcel,
   ],
   synchronize: true,
 };

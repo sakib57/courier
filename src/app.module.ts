@@ -7,6 +7,7 @@ import { BranchModule } from './branch/branch.module';
 import { AppController } from './app.controller';
 import { MerchantModule } from './merchant/merchant.module';
 import { RiderModule } from './rider/rider.module';
+import { ParcelModule } from './parcel/parcel.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RiderModule } from './rider/rider.module';
     BranchModule,
     MerchantModule,
     RiderModule,
+    ParcelModule,
   ],
   controllers: [AppController],
 })

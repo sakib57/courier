@@ -1,10 +1,27 @@
-import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Post,
+  ValidationPipe,
+} from '@nestjs/common';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { District } from 'src/entities/district.entity';
 import { Upazila } from 'src/entities/upazila.entity';
 import { DistrictDto } from 'src/repositories/district.repository';
 import { UpazilaDto } from 'src/repositories/upazila.repository';
 import { AdminService } from './admin.service';
 
+@ApiTags('Admin')
+@ApiResponse({
+  status: HttpStatus.METHOD_NOT_ALLOWED,
+  description: 'Method not allowed',
+})
+@ApiResponse({
+  status: HttpStatus.INTERNAL_SERVER_ERROR,
+  description: 'Server Error!',
+})
 @Controller('admin')
 export class AdminController {
   constructor(private adminService: AdminService) {}

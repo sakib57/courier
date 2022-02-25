@@ -1,7 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import { Branch } from './branch.entity';
+import { Parcel } from './parcel.entity';
 
 @Entity()
 export class Merchant extends User {
@@ -10,6 +11,9 @@ export class Merchant extends User {
     name: 'branch_id',
   })
   branch: Branch;
+
+  @OneToMany(() => Parcel, (parcel) => parcel.merchant)
+  parcels: Parcel[];
 
   @Column()
   company_name: string;

@@ -1,7 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import { Branch } from './branch.entity';
+import { PickupParcel } from './pickup-parcel.entity';
 
 @Entity()
 export class Rider extends User {
@@ -16,6 +17,9 @@ export class Rider extends User {
 
   @Column()
   contact_number: string;
+
+  @OneToMany(() => PickupParcel, (pickup_parcel) => pickup_parcel.rider)
+  pickup_parcels: PickupParcel[];
 
   @Column()
   isActive: boolean;

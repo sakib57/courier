@@ -1,10 +1,26 @@
-import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpStatus,
+  Post,
+  ValidationPipe,
+} from '@nestjs/common';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AdminDto } from 'src/admin/admin.dto';
 import { AuthService } from './auth.service';
 import { MerchantSignUpDto } from './dto/merchant-sign-up.dto';
 import { RiderSignUpDto } from './dto/rider-sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
 
+@ApiTags('Authentication')
+@ApiResponse({
+  status: HttpStatus.METHOD_NOT_ALLOWED,
+  description: 'Method not allowed',
+})
+@ApiResponse({
+  status: HttpStatus.INTERNAL_SERVER_ERROR,
+  description: 'Server Error!',
+})
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
