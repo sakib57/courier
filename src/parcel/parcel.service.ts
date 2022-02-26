@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Parcel } from 'src/entities/parcel.entity';
 import { ParcelDto } from './parcel.dto';
 import { ParcelRepository } from './parcel.repository';
@@ -13,6 +13,15 @@ export class ParcelService {
       return this.parcelRepository.find(branch_id);
     }
     return this.parcelRepository.find();
+  }
+
+  // Find parcel by id
+  async parcel(id): Promise<any> {
+    const parcel = await this.parcelRepository.findOne(id);
+    if (!parcel) {
+      throw new NotFoundException('Parcel not foud');
+    }
+    return parcel;
   }
 
   // Parcel req create

@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  Param,
   Post,
   Query,
   ValidationPipe,
@@ -35,5 +36,11 @@ export class ParcelController {
   @Post('create')
   createParcelReq(@Body(ValidationPipe) parcelDto: ParcelDto) {
     return this.parcelService.createParcelReq(parcelDto);
+  }
+
+  // Find Parcel
+  @Get(':id')
+  parcel(@Param() id: number): Promise<Parcel> {
+    return this.parcelService.parcel(id);
   }
 }
