@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Parcel } from 'src/entities/parcel.entity';
+import { getRepository } from 'typeorm';
 import { ParcelDto } from './parcel.dto';
 import { ParcelRepository } from './parcel.repository';
 
@@ -7,12 +8,40 @@ import { ParcelRepository } from './parcel.repository';
 export class ParcelService {
   constructor(private parcelRepository: ParcelRepository) {}
 
-  // Parcel List
-  async parcelList(branch_id): Promise<Parcel[]> {
-    if (branch_id !== '' || branch_id != null) {
-      return this.parcelRepository.find(branch_id);
+  // Branch's Pickup Parcel List
+  async branchParcelList(branch_id, query): Promise<Parcel[]> {
+    if (query.hasOwnProperty('status') && query.status !== '') {
+      return await getRepository(Parcel)
+        .createQueryBuilder('parcel')
+        .leftJoin('parcel.merchant', 'merchant')
+        .leftJoin('merchant.branch', 'branch')
+        .where('merchant.branch.id = :branch_id', branch_id)
+        .andWhere('parcel.pickup_status = :status', { status: query.status })
+        .getMany();
     }
-    return this.parcelRepository.find();
+    return await getRepository(Parcel)
+      .createQueryBuilder('parcel')
+      .leftJoin('parcel.merchant', 'merchant')
+      .leftJoin('merchant.branch', 'branch')
+      .where('merchant.branch.id = :branch_id', branch_id)
+      .getMany();
+  }
+
+  // Merchant's Pickup Parcel List
+  async merchantsParcelList(merchant_id, query): Promise<Parcel[]> {
+    if (query.hasOwnProperty('status') && query.status !== '') {
+      return await getRepository(Parcel)
+        .createQueryBuilder('parcel')
+        .leftJoin('parcel.merchant', 'merchant')
+        .where('merchant.id = :merchant_id', merchant_id)
+        .andWhere('parcel.pickup_status = :status', { status: query.status })
+        .getMany();
+    }
+    return await getRepository(Parcel)
+      .createQueryBuilder('parcel')
+      .leftJoin('parcel.merchant', 'merchant')
+      .where('merchant.id = :merchant_id', merchant_id)
+      .getMany();
   }
 
   // Find parcel by id

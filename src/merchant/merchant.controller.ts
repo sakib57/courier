@@ -1,6 +1,8 @@
-import { Controller, Get, HttpStatus } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param, Query } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Merchant } from 'src/entities/merchant.entity';
+import { Parcel, PickupStatus } from 'src/entities/parcel.entity';
+import { ParcelService } from 'src/parcel/parcel.service';
 import { MerchantService } from './merchant.service';
 
 @ApiTags('Merchant')
@@ -14,11 +16,23 @@ import { MerchantService } from './merchant.service';
 })
 @Controller('merchant')
 export class MerchantController {
-  constructor(private merchantService: MerchantService) {}
+  constructor(
+    private merchantService: MerchantService,
+    private parcelService: ParcelService,
+  ) {}
 
   //   Merchant List
   @Get('list')
   merchantList(): Promise<Merchant[]> {
     return this.merchantService.merchantList();
+  }
+
+  // Pickup Parcel List
+  @Get('pickup-parcel-list/:merchant_id')
+  parcelList(
+    @Param() merchant_id: number,
+    @Query() query: PickupStatus,
+  ): Promise<Parcel[]> {
+    return this.parcelService.merchantsParcelList(merchant_id, query);
   }
 }

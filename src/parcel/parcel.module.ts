@@ -8,5 +8,6 @@ import { ParcelRepository } from './parcel.repository';
   imports: [TypeOrmModule.forFeature([ParcelRepository])],
   providers: [ParcelService],
   controllers: [ParcelController],
+  exports: [ParcelService],
 })
 export class ParcelModule {}

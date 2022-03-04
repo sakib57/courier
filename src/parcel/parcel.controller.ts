@@ -27,10 +27,10 @@ export class ParcelController {
   constructor(private parcelService: ParcelService) {}
 
   // Parcel List
-  @Get('pickup-list')
-  parcelList(@Query() branch_id): Promise<Parcel[]> {
-    return this.parcelService.parcelList(branch_id);
-  }
+  // @Get('pickup-list')
+  // parcelList(@Query() branch_id): Promise<Parcel[]> {
+  //   return this.parcelService.parcelList(branch_id);
+  // }
 
   //   Parcel req create
   @Post('create')

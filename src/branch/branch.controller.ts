@@ -3,11 +3,15 @@ import {
   Controller,
   Get,
   HttpStatus,
+  Param,
   Post,
+  Query,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AssignDto } from 'src/common/assign.dto';
+import { Parcel, PickupStatus } from 'src/entities/parcel.entity';
+import { ParcelService } from 'src/parcel/parcel.service';
 import { BranchDto } from './branch.dto';
 import { BranchService } from './branch.service';
 
@@ -22,7 +26,10 @@ import { BranchService } from './branch.service';
 })
 @Controller('branch')
 export class BranchController {
-  constructor(private branchService: BranchService) {}
+  constructor(
+    private branchService: BranchService,
+    private parcelService: ParcelService,
+  ) {}
 
   @Post('create')
   create(@Body(ValidationPipe) branchDto: BranchDto) {
@@ -32,6 +39,15 @@ export class BranchController {
   @Get('list')
   index(): Promise<BranchDto[]> {
     return this.branchService.branchList();
+  }
+
+  // Pickup Parcel List
+  @Get('pickup-parcel-list/:branch_id')
+  parcelList(
+    @Param() branch_id: number,
+    @Query() query: PickupStatus,
+  ): Promise<Parcel[]> {
+    return this.parcelService.branchParcelList(branch_id, query);
   }
 
   @Post('assign/pickup')
