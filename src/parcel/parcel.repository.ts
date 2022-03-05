@@ -2,7 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 import { Merchant } from 'src/entities/merchant.entity';
 import { Parcel } from 'src/entities/parcel.entity';
 import { EntityRepository, Repository } from 'typeorm';
-import { ParcelDto } from './parcel.dto';
+import { ParcelDto } from './dto/parcel.dto';
 
 @EntityRepository(Parcel)
 export class ParcelRepository extends Repository<Parcel> {
@@ -14,7 +14,7 @@ export class ParcelRepository extends Repository<Parcel> {
       customer_name,
       customer_phone,
       customer_address,
-      collect_ammount,
+      collect_amount,
       weight,
       delivery_instruction,
     } = parcelDto;
@@ -30,7 +30,7 @@ export class ParcelRepository extends Repository<Parcel> {
     parcel.customer_name = customer_name;
     parcel.customer_phone = customer_phone;
     parcel.customer_address = customer_address;
-    parcel.collect_amount = collect_ammount;
+    parcel.collect_amount = collect_amount;
     parcel.weight = weight;
     parcel.delivery_instruction = delivery_instruction;
 

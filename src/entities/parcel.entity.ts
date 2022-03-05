@@ -5,10 +5,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { DeliveryParcel } from './delivery-parcel.entity';
 import { Merchant } from './merchant.entity';
+import { PickupParcel } from './pickup-parcel.entity';
 
 export enum PickupStatus {
   PENDIGN = 'Pending',
@@ -69,6 +72,12 @@ export class Parcel extends BaseEntity {
     default: DeliveryStatus.PENDIGN,
   })
   delivery_status: string;
+
+  @OneToOne(() => PickupParcel, (pickupParcel) => pickupParcel.parcel)
+  pickupParcel: PickupParcel;
+
+  @OneToOne(() => DeliveryParcel, (deliveryParcel) => deliveryParcel.parcel)
+  deliveryParcel: DeliveryParcel;
 
   @CreateDateColumn()
   created_at: Date;

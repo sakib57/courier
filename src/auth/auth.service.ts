@@ -52,7 +52,6 @@ export class AuthService {
 
   // Rider SignUp
   async riderSignUp(signUpDto: RiderSignUpDto) {
-    console.log('rider');
     return this.riderRepository.signUp(signUpDto);
   }
 

@@ -20,7 +20,7 @@ export class ParcelDto {
   customer_address: string;
 
   @IsNotEmpty()
-  collect_ammount: number;
+  collect_amount: number;
 
   @IsNotEmpty()
   weight: number;

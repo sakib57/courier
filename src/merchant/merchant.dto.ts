@@ -1,4 +1,5 @@
 export class MerchantDto {
+  id: number;
   name: string;
   email: string;
   company_name: string;

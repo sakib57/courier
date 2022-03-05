@@ -29,10 +29,19 @@ export class MerchantController {
 
   // Pickup Parcel List
   @Get('pickup-parcel-list/:merchant_id')
-  parcelList(
+  parcelPickupList(
     @Param() merchant_id: number,
     @Query() query: PickupStatus,
   ): Promise<Parcel[]> {
-    return this.parcelService.merchantsParcelList(merchant_id, query);
+    return this.parcelService.merchantsPickupParcelList(merchant_id, query);
+  }
+
+  // Delivery Parcel List
+  @Get('delivery-parcel-list/:merchant_id')
+  parceDeliverylList(
+    @Param() merchant_id: number,
+    @Query() query: PickupStatus,
+  ): Promise<Parcel[]> {
+    return this.parcelService.merchantsDeliveryParcelList(merchant_id, query);
   }
 }

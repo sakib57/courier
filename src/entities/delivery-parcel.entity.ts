@@ -12,15 +12,15 @@ import { Parcel } from './parcel.entity';
 import { Rider } from './rider.entity';
 
 @Entity()
-export class PickupParcel extends BaseEntity {
+export class DeliveryParcel extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Parcel, (parcel) => parcel.pickupParcel)
+  @OneToOne(() => Parcel, (parcel) => parcel.deliveryParcel)
   @JoinColumn()
   parcel: Parcel;
 
-  @ManyToOne(() => Rider, (rider) => rider.pickup_parcels)
+  @ManyToOne(() => Rider, (rider) => rider.delivery_parcels)
   @JoinColumn({
     name: 'rider_id',
   })

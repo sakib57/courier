@@ -3,6 +3,7 @@ import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import { Branch } from './branch.entity';
 import { PickupParcel } from './pickup-parcel.entity';
+import { DeliveryParcel } from './delivery-parcel.entity';
 
 @Entity()
 export class Rider extends User {
@@ -20,6 +21,9 @@ export class Rider extends User {
 
   @OneToMany(() => PickupParcel, (pickup_parcel) => pickup_parcel.rider)
   pickup_parcels: PickupParcel[];
+
+  @OneToMany(() => DeliveryParcel, (delivery_parcel) => delivery_parcel.rider)
+  delivery_parcels: DeliveryParcel[];
 
   @Column()
   isActive: boolean;

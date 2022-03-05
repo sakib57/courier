@@ -59,6 +59,7 @@ export class MerchantRepository extends Repository<Merchant> {
     const merchant = await this.findOne({ email });
     if (merchant && (await merchant.validateMerchantPassword(password))) {
       const merchantData: MerchantDto = {
+        id: merchant.id,
         name: merchant.name,
         email: merchant.email,
         company_name: merchant.company_name,

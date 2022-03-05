@@ -12,6 +12,7 @@ export class AdminRepository extends Repository<Admin> {
 
     if (admin && (await admin.validatePassword(password))) {
       const adminData: AdminDto = {
+        id: admin.id,
         name: admin.name,
         email: '',
         accessToken: '',

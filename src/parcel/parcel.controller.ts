@@ -4,13 +4,14 @@ import {
   Get,
   HttpStatus,
   Param,
+  Patch,
   Post,
-  Query,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Parcel } from 'src/entities/parcel.entity';
-import { ParcelDto } from './parcel.dto';
+import { UpdateDeliveryStatusDto, UpdatePickupStatusDto } from './dto';
+import { ParcelDto } from './dto/parcel.dto';
 import { ParcelService } from './parcel.service';
 
 @ApiTags('Parcel')
@@ -36,6 +37,30 @@ export class ParcelController {
   @Post('create')
   createParcelReq(@Body(ValidationPipe) parcelDto: ParcelDto) {
     return this.parcelService.createParcelReq(parcelDto);
+  }
+
+  // Update parcel pickup status
+  @Patch('update-pickup-status/:parcel_id')
+  updatePickpuStatus(
+    @Param('parcel_id') parcel_id,
+    @Body(ValidationPipe) updatePickupStatusDto: UpdatePickupStatusDto,
+  ) {
+    return this.parcelService.updateParcelPickupStatus(
+      parcel_id,
+      updatePickupStatusDto,
+    );
+  }
+
+  // Update parcel delivery status
+  @Patch('update-delivery-status/:parcel_id')
+  updateDeliveryStatus(
+    @Param('parcel_id') parcel_id,
+    @Body(ValidationPipe) updateDeliveryStatusDto: UpdateDeliveryStatusDto,
+  ) {
+    return this.parcelService.updateParcelDeliveryStatus(
+      parcel_id,
+      updateDeliveryStatusDto,
+    );
   }
 
   // Find Parcel

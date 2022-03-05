@@ -43,15 +43,31 @@ export class BranchController {
 
   // Pickup Parcel List
   @Get('pickup-parcel-list/:branch_id')
-  parcelList(
+  parcelPickupList(
     @Param() branch_id: number,
     @Query() query: PickupStatus,
   ): Promise<Parcel[]> {
-    return this.parcelService.branchParcelList(branch_id, query);
+    return this.parcelService.branchPickupParcelList(branch_id, query);
   }
 
+  // Delivery Parcel List
+  @Get('delivery-parcel-list/:branch_id')
+  parceDeliverylList(
+    @Param() branch_id: number,
+    @Query() query: PickupStatus,
+  ): Promise<Parcel[]> {
+    return this.parcelService.branchDeliveryParcelList(branch_id, query);
+  }
+
+  // Assign for pickup
   @Post('assign/pickup')
   assignPickup(@Body(ValidationPipe) assignDto: AssignDto) {
     return this.branchService.assignPickup(assignDto);
+  }
+
+  // Assign for delivery
+  @Post('assign/delivery')
+  assignDelivery(@Body(ValidationPipe) assignDto: AssignDto) {
+    return this.branchService.assignDelivery(assignDto);
   }
 }

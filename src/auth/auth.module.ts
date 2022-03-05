@@ -14,7 +14,7 @@ import { RiderRepository } from 'src/rider/rider.repository';
     JwtModule.register({
       secret: 'topsecret51',
       signOptions: {
-        expiresIn: 3600,
+        expiresIn: 3600 * 24,
       },
     }),
     TypeOrmModule.forFeature([

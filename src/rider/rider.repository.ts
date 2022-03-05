@@ -51,6 +51,7 @@ export class RiderRepository extends Repository<Rider> {
     const rider = await this.findOne({ email });
     if (rider && (await rider.validateRiderPassword(password))) {
       const riderData: RiderDto = {
+        id: rider.id,
         name: rider.name,
         email: rider.email,
         address: rider.address,
