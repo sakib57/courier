@@ -8,6 +8,7 @@ import {
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AdminDto } from 'src/admin/admin.dto';
 import { AuthService } from './auth.service';
+import { AdminSignUpDto } from './dto';
 import { MerchantSignUpDto } from './dto/merchant-sign-up.dto';
 import { RiderSignUpDto } from './dto/rider-sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
@@ -26,6 +27,11 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   // ======== Admin Sign In Method =========
+  @Post('admin/signup')
+  adminSignUp(@Body(ValidationPipe) signUpDto: AdminSignUpDto): Promise<void> {
+    return this.authService.adminSignUp(signUpDto);
+  }
+
   @Post('admin/signin')
   adminSignIn(@Body(ValidationPipe) signInDto: SignInDto): Promise<AdminDto> {
     return this.authService.adminSignIn(signInDto);
@@ -51,5 +57,10 @@ export class AuthController {
   @Post('rider/signin')
   riderSignIn(@Body() signInDto: SignInDto): Promise<string> {
     return this.authService.riderSignIn(signInDto);
+  }
+
+  @Post('branch/signin')
+  branchSignIn(@Body() signInDto: SignInDto): Promise<string> {
+    return this.authService.branchSignIn(signInDto);
   }
 }

@@ -11,4 +11,6 @@ export class BranchDto {
 
   @IsNotEmpty()
   user_password: string;
+
+  salt: string;
 }

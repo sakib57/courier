@@ -7,6 +7,7 @@ import { AuthController } from './auth.controller';
 import { AdminRepository } from 'src/admin/admin.repository';
 import { MerchantRepository } from 'src/merchant/merchant.repository';
 import { RiderRepository } from 'src/rider/rider.repository';
+import { BranchRepository } from 'src/branch/branch.repository';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { RiderRepository } from 'src/rider/rider.repository';
       AdminRepository,
       MerchantRepository,
       RiderRepository,
+      BranchRepository,
     ]),
   ],
   providers: [AuthService],

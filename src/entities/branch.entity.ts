@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Merchant } from './merchant.entity';
+import * as bcrypt from 'bcrypt';
 
 @Entity()
 export class Branch extends BaseEntity {
@@ -23,6 +24,9 @@ export class Branch extends BaseEntity {
   @Column()
   user_password: string;
 
+  @Column()
+  salt: string;
+
   @OneToMany(() => Merchant, (merchant) => merchant.branch)
   merchants: Merchant[];
 
@@ -31,4 +35,9 @@ export class Branch extends BaseEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  async validateRiderPassword(password: string): Promise<boolean> {
+    const hash = await bcrypt.hash(password, this.salt);
+    return hash === this.user_password;
+  }
 }
