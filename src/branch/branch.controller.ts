@@ -10,9 +10,11 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AssignDto } from 'src/common/assign.dto';
+import { Branch } from 'src/entities/branch.entity';
 import { Parcel, PickupStatus } from 'src/entities/parcel.entity';
 import { ParcelService } from 'src/parcel/parcel.service';
 import { BranchDto } from './branch.dto';
+import { IBranch } from './branch.interface';
 import { BranchService } from './branch.service';
 
 @ApiTags('Branch')
@@ -32,12 +34,12 @@ export class BranchController {
   ) {}
 
   @Post('create')
-  create(@Body(ValidationPipe) branchDto: BranchDto) {
+  create(@Body(ValidationPipe) branchDto: BranchDto): Promise<IBranch> {
     return this.branchService.createBranch(branchDto);
   }
 
   @Get('list')
-  index(): Promise<BranchDto[]> {
+  index(): Promise<Branch[]> {
     return this.branchService.branchList();
   }
 

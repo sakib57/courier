@@ -4,8 +4,10 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Branch } from './branch.entity';
 import { District } from './district.entity';
 
 @Entity()
@@ -21,4 +23,7 @@ export class Upazila extends BaseEntity {
     name: 'district_id',
   })
   district: District;
+
+  @OneToMany(() => Branch, (branch) => branch.upazila)
+  branches: Branch[];
 }

@@ -5,6 +5,7 @@ import { Branch } from 'src/entities/branch.entity';
 import { DeliveryParcelRepository } from 'src/repositories/delivery-parcel.repository';
 import { PickupParcelRepository } from 'src/repositories/pickup-parcel.repository';
 import { BranchDto } from './branch.dto';
+import { IBranch } from './branch.interface';
 import { BranchRepository } from './branch.repository';
 
 @Injectable()
@@ -19,12 +20,12 @@ export class BranchService {
   ) {}
 
   // Create Branch
-  async createBranch(branchDto: BranchDto): Promise<Branch> {
+  async createBranch(branchDto: BranchDto): Promise<IBranch> {
     return this.branchRepository.createBranch(branchDto);
   }
 
   // Branch List
-  async branchList(): Promise<BranchDto[]> {
+  async branchList(): Promise<Branch[]> {
     return this.branchRepository.branchList();
   }
 

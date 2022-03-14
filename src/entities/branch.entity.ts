@@ -3,12 +3,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Merchant } from './merchant.entity';
 import * as bcrypt from 'bcrypt';
+import { Upazila } from './upazila.entity';
 
 @Entity()
 export class Branch extends BaseEntity {
@@ -27,8 +30,20 @@ export class Branch extends BaseEntity {
   @Column()
   salt: string;
 
+  @Column()
+  phone: string;
+
+  @Column({ type: 'text' })
+  address: string;
+
   @OneToMany(() => Merchant, (merchant) => merchant.branch)
   merchants: Merchant[];
+
+  @ManyToOne(() => Upazila, (upazila) => upazila.branches)
+  @JoinColumn({
+    name: 'upazila_id',
+  })
+  upazila: Upazila;
 
   @CreateDateColumn()
   created_at: Date;
@@ -36,7 +51,7 @@ export class Branch extends BaseEntity {
   @UpdateDateColumn()
   updated_at: Date;
 
-  async validateRiderPassword(password: string): Promise<boolean> {
+  async validateBranchPassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);
     return hash === this.user_password;
   }

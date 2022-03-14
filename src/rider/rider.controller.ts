@@ -1,7 +1,7 @@
 import { Controller, Get, HttpStatus, Param, Query } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Parcel } from 'src/entities/parcel.entity';
-import { Rider } from 'src/entities/rider.entity';
+import { IRider } from './rider.interface';
 import { RiderService } from './rider.service';
 
 @ApiTags('Rider')
@@ -18,7 +18,7 @@ export class RiderController {
   constructor(private riderService: RiderService) {}
   //   Rider List
   @Get('list')
-  merchantList(): Promise<Rider[]> {
+  merchantList(): Promise<IRider[]> {
     return this.riderService.riderList();
   }
 
@@ -29,5 +29,14 @@ export class RiderController {
     @Query() query,
   ): Promise<Parcel[]> {
     return this.riderService.ridersPickupParcels(rider_id, query);
+  }
+
+  // Rider's delivery parcels
+  @Get(':rider_id/delivery-parcel-list')
+  ridersDliveryParcels(
+    @Param('rider_id') rider_id,
+    @Query() query,
+  ): Promise<Parcel[]> {
+    return this.riderService.ridersDeliveryParcels(rider_id, query);
   }
 }
