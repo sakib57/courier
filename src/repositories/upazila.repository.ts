@@ -1,4 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 import { District } from 'src/entities/district.entity';
 import { Upazila } from 'src/entities/upazila.entity';
@@ -31,8 +32,10 @@ export class UpazilaDto {
   id: number;
 
   @IsNotEmpty()
+  @ApiProperty()
   name: string;
 
   @IsNotEmpty()
+  @ApiProperty()
   district_id: number;
 }

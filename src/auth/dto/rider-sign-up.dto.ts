@@ -1,13 +1,16 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString, MinLength } from 'class-validator';
 import { Match } from 'src/common/match-validator';
 
 export class RiderSignUpDto {
   @IsString()
   @MinLength(2)
+  @ApiProperty()
   name: string;
 
   @IsString()
   @IsEmail()
+  @ApiProperty()
   email: string;
 
   @IsString()
@@ -19,16 +22,21 @@ export class RiderSignUpDto {
   //     message: 'Password is too week',
   //   })
   @MinLength(6)
+  @ApiProperty()
   password: string;
 
   @Match('password')
+  @ApiProperty()
   password_confirm: string;
 
   @IsString()
+  @ApiProperty()
   address: string;
 
   @IsString()
+  @ApiProperty()
   contact_number: string;
 
+  @ApiProperty()
   branch_id: number;
 }

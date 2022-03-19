@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsString,
@@ -8,6 +9,7 @@ import {
 export class SignInDto {
   @IsString()
   @IsEmail()
+  @ApiProperty()
   email: string;
 
   @IsString()
@@ -19,5 +21,6 @@ export class SignInDto {
   //     message: 'Password is too week',
   //   })
   @MinLength(6)
+  @ApiProperty()
   password: string;
 }

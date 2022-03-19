@@ -1,4 +1,5 @@
 import { HttpException } from '@nestjs/common';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 import { District } from 'src/entities/district.entity';
 import { EntityRepository, Repository } from 'typeorm';
@@ -32,5 +33,6 @@ export class DistrictDto {
   id: number;
 
   @IsNotEmpty()
+  @ApiProperty()
   name: string;
 }
