@@ -8,15 +8,18 @@ import { EntityRepository, Repository } from 'typeorm';
 @EntityRepository(Upazila)
 export class UpazilaRepository extends Repository<Upazila> {
   // Upazial List
-  async upazilaList() {
-    return this.find();
+  async upazilaList(district) {
+    if (district) {
+      return await this.find({ district: district });
+    }
+    return await this.find();
   }
 
   // Upazila Creare
   async createUpazila(upazilaDto: UpazilaDto) {
     const { name, district_id } = upazilaDto;
 
-    const district = await District.findOne(district_id);
+    const district = await District.findOne({ id: district_id });
     if (!district) {
       throw new NotFoundException('District not found');
     }

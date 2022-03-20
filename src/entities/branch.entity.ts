@@ -12,6 +12,7 @@ import {
 import { Merchant } from './merchant.entity';
 import * as bcrypt from 'bcrypt';
 import { Upazila } from './upazila.entity';
+import { Parcel } from './parcel.entity';
 
 @Entity()
 export class Branch extends BaseEntity {
@@ -35,6 +36,9 @@ export class Branch extends BaseEntity {
 
   @Column({ type: 'text' })
   address: string;
+
+  @OneToMany(() => Parcel, (parcel) => parcel.d_branch)
+  parcels: Parcel[];
 
   @OneToMany(() => Merchant, (merchant) => merchant.branch)
   merchants: Merchant[];

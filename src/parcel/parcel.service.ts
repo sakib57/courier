@@ -10,6 +10,7 @@ import {
   UpdateDeliveryStatusDto,
   UpdatePickupStatusDto,
 } from './dto';
+import { ParcelUpdateDto } from './dto/parcel.update.dto';
 import { ParcelRepository } from './parcel.repository';
 
 @Injectable()
@@ -124,6 +125,14 @@ export class ParcelService {
   // Parcel req create
   async createParcelReq(parcelDto: ParcelDto): Promise<Parcel> {
     return this.parcelRepository.createParcelReq(parcelDto);
+  }
+
+  // Parcel req update
+  async updateParcelReq(
+    id: number,
+    parcelUpdateDto: ParcelUpdateDto,
+  ): Promise<Parcel> {
+    return this.parcelRepository.updateParcelReq(id, parcelUpdateDto);
   }
 
   // Update Parcel Pickup Status

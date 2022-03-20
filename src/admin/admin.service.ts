@@ -31,8 +31,8 @@ export class AdminService {
   }
 
   // Upazila List
-  async upazilaList(): Promise<Upazila[]> {
-    return this.upazilaRepository.upazilaList();
+  async upazilaList(district): Promise<Upazila[]> {
+    return this.upazilaRepository.upazilaList(district);
   }
 
   // Create Upazila

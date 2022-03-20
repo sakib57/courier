@@ -25,8 +25,8 @@ export class BranchService {
   }
 
   // Branch List
-  async branchList(): Promise<Branch[]> {
-    return this.branchRepository.branchList();
+  async branchList(upazila): Promise<Branch[]> {
+    return this.branchRepository.branchList(upazila);
   }
 
   // Assign For Pickup

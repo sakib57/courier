@@ -12,6 +12,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Parcel } from 'src/entities/parcel.entity';
 import { UpdateDeliveryStatusDto, UpdatePickupStatusDto } from './dto';
 import { ParcelDto } from './dto/parcel.dto';
+import { ParcelUpdateDto } from './dto/parcel.update.dto';
 import { ParcelService } from './parcel.service';
 
 @ApiTags('Parcel')
@@ -33,10 +34,19 @@ export class ParcelController {
   //   return this.parcelService.parcelList(branch_id);
   // }
 
-  //   Parcel req create
+  // Parcel req create
   @Post('create')
   createParcelReq(@Body(ValidationPipe) parcelDto: ParcelDto) {
     return this.parcelService.createParcelReq(parcelDto);
+  }
+
+  // Parcel req create
+  @Patch('update/:id')
+  updateParcelReq(
+    @Param('id') id,
+    @Body(ValidationPipe) parcelUpdateDto: ParcelUpdateDto,
+  ) {
+    return this.parcelService.updateParcelReq(id, parcelUpdateDto);
   }
 
   // Update parcel pickup status

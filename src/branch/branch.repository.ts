@@ -45,14 +45,22 @@ export class BranchRepository extends Repository<Branch> {
   }
 
   // Branch List
-  async branchList(): Promise<Branch[]> {
+  async branchList(upazila): Promise<Branch[]> {
+    if (upazila) {
+      return await this.find({ upazila: upazila });
+    }
     return await this.find();
   }
 
   // Validate password
   async validateBranchPassword(signInDto: SignInDto): Promise<BranchDto> {
     const { email, password } = signInDto;
-    const branch = await this.findOne({ user_email: email });
+    const branch = await this.findOne(
+      {
+        user_email: email,
+      },
+      { relations: ['upazila'] },
+    );
     if (branch && (await branch.validateBranchPassword(password))) {
       const branchData: BranchDto = {
         id: branch.id,

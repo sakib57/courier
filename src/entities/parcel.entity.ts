@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Branch } from './branch.entity';
 import { DeliveryParcel } from './delivery-parcel.entity';
 import { Merchant } from './merchant.entity';
 import { PickupParcel } from './pickup-parcel.entity';
@@ -41,6 +42,12 @@ export class Parcel extends BaseEntity {
     name: 'merchant_id',
   })
   merchant: Merchant;
+
+  @ManyToOne(() => Branch, (branch) => branch.parcels, { nullable: true })
+  @JoinColumn({
+    name: 'd_branch_id',
+  })
+  d_branch: Branch;
 
   @Column({ type: 'text' })
   pickup_location: string;

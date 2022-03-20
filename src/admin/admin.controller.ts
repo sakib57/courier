@@ -4,6 +4,7 @@ import {
   Get,
   HttpStatus,
   Post,
+  Query,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -42,8 +43,8 @@ export class AdminController {
 
   // Upazila List
   @Get('/upazila/list')
-  upazilaList(): Promise<Upazila[]> {
-    return this.adminService.upazilaList();
+  upazilaList(@Query('district') district): Promise<Upazila[]> {
+    return this.adminService.upazilaList(district);
   }
 
   // Create Upazila

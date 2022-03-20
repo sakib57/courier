@@ -39,8 +39,8 @@ export class BranchController {
   }
 
   @Get('list')
-  index(): Promise<Branch[]> {
-    return this.branchService.branchList();
+  index(@Query('upazila') upazila): Promise<Branch[]> {
+    return this.branchService.branchList(upazila);
   }
 
   // Pickup Parcel List

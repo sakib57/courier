@@ -1,10 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class ParcelDto {
-  @ApiProperty()
-  merchant_id: number;
-
+export class ParcelUpdateDto {
   @ApiProperty()
   @IsOptional()
   d_branch_id: number;
@@ -40,8 +37,4 @@ export class ParcelDto {
   @IsString()
   @ApiProperty()
   delivery_instruction: string;
-
-  created_at: string;
-
-  updated_at: string;
 }
