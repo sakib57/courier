@@ -1,6 +1,15 @@
-import { Controller, Get, HttpStatus, Param, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Patch,
+  Query,
+} from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Parcel } from 'src/entities/parcel.entity';
+import { RiderUpdateDto } from './rider-update.dto';
 import { IRider } from './rider.interface';
 import { RiderService } from './rider.service';
 
@@ -16,10 +25,26 @@ import { RiderService } from './rider.service';
 @Controller('rider')
 export class RiderController {
   constructor(private riderService: RiderService) {}
+
   //   Rider List
   @Get('list')
-  merchantList(): Promise<IRider[]> {
+  riderList(): Promise<IRider[]> {
     return this.riderService.riderList();
+  }
+
+  // Riders profile
+  @Get('profile/:id')
+  ridersProfile(@Param('rider_id') rider_id): Promise<IRider> {
+    return this.riderService.riderProfile(rider_id);
+  }
+
+  // Riders profile update
+  @Patch('profile/update/:id')
+  ridersProfileUpdate(
+    @Param('rider_id') rider_id,
+    @Body() riderUpdateDto: RiderUpdateDto,
+  ): Promise<IRider> {
+    return this.riderService.riderProfileUpdate(rider_id, riderUpdateDto);
   }
 
   // Rider's pickup parcels

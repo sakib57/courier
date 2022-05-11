@@ -3,6 +3,8 @@ import {
   Controller,
   Get,
   HttpStatus,
+  Param,
+  Patch,
   Post,
   Query,
   ValidationPipe,
@@ -12,6 +14,8 @@ import { District } from 'src/entities/district.entity';
 import { Upazila } from 'src/entities/upazila.entity';
 import { DistrictDto } from 'src/repositories/district.repository';
 import { UpazilaDto } from 'src/repositories/upazila.repository';
+import { AdminUpdateDto } from './admin-update.dto';
+import { IAdmin } from './admin.interface';
 import { AdminService } from './admin.service';
 
 @ApiTags('Admin')
@@ -26,6 +30,21 @@ import { AdminService } from './admin.service';
 @Controller('admin')
 export class AdminController {
   constructor(private adminService: AdminService) {}
+
+  // Admins profile
+  @Get('profile/:id')
+  ridersProfile(@Param('admin_id') admin_id): Promise<IAdmin> {
+    return this.adminService.adminProfile(admin_id);
+  }
+
+  // Admins profile update
+  @Patch('profile/update/:id')
+  ridersProfileUpdate(
+    @Param('admin_id') admin_id,
+    @Body() riderUpdateDto: AdminUpdateDto,
+  ): Promise<IAdmin> {
+    return this.adminService.adminProfileUpdate(admin_id, riderUpdateDto);
+  }
 
   // District List
   @Get('/district/list')

@@ -1,7 +1,16 @@
-import { Controller, Get, HttpStatus, Param, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Patch,
+  Query,
+} from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Parcel, PickupStatus } from 'src/entities/parcel.entity';
 import { ParcelService } from 'src/parcel/parcel.service';
+import { MerchantUpdateDto } from './merchant-update.dto';
 import { IMerchant } from './merchant.interface';
 import { MerchantService } from './merchant.service';
 
@@ -25,6 +34,24 @@ export class MerchantController {
   @Get('list')
   merchantList(): Promise<IMerchant[]> {
     return this.merchantService.merchantList();
+  }
+
+  // Merchants profile
+  @Get('profile/:id')
+  merchantProfile(@Param('merchant_id') merchant_id): Promise<IMerchant> {
+    return this.merchantService.merchantProfile(merchant_id);
+  }
+
+  // Merchants profile update
+  @Patch('profile/update/:id')
+  merchantProfileUpdate(
+    @Param('merchant_id') merchant_id,
+    @Body() merchantUpdateDto: MerchantUpdateDto,
+  ): Promise<IMerchant> {
+    return this.merchantService.merchantProfileUpdate(
+      merchant_id,
+      merchantUpdateDto,
+    );
   }
 
   // Pickup Parcel List

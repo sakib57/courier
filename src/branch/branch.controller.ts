@@ -4,6 +4,7 @@ import {
   Get,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Query,
   ValidationPipe,
@@ -13,6 +14,7 @@ import { AssignDto } from 'src/common/assign.dto';
 import { Branch } from 'src/entities/branch.entity';
 import { Parcel, PickupStatus } from 'src/entities/parcel.entity';
 import { ParcelService } from 'src/parcel/parcel.service';
+import { BranchUpdateDto } from './branch-update.dto';
 import { BranchDto } from './branch.dto';
 import { IBranch } from './branch.interface';
 import { BranchService } from './branch.service';
@@ -41,6 +43,21 @@ export class BranchController {
   @Get('list')
   index(@Query('upazila') upazila): Promise<Branch[]> {
     return this.branchService.branchList(upazila);
+  }
+
+  // Branch profile
+  @Get('profile/:id')
+  branchProfile(@Param('branch_id') branch_id): Promise<IBranch> {
+    return this.branchService.branchProfile(branch_id);
+  }
+
+  // Branch profile update
+  @Patch('profile/update/:id')
+  branchProfileUpdate(
+    @Param('branch_id') branch_id,
+    @Body() branchUpdateDto: BranchUpdateDto,
+  ): Promise<IBranch> {
+    return this.branchService.branchProfileUpdate(branch_id, branchUpdateDto);
   }
 
   // Pickup Parcel List

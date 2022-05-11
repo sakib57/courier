@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MerchantUpdateDto } from './merchant-update.dto';
 import { IMerchant } from './merchant.interface';
 import { MerchantRepository } from './merchant.repository';
 
@@ -9,6 +10,37 @@ export class MerchantService {
     @InjectRepository(MerchantRepository)
     private merchantRepository: MerchantRepository,
   ) {}
+
+  // Merchants profile
+  async merchantProfile(id: number): Promise<IMerchant> {
+    const merchant = await this.merchantRepository.findOne(id);
+    if (!merchant) {
+      throw new NotFoundException('Rider not found');
+    }
+    return merchant;
+  }
+
+  // Merchants profile update
+  async merchantProfileUpdate(
+    id: number,
+    merchantUpdateDto: MerchantUpdateDto,
+  ): Promise<IMerchant> {
+    const merchant = await this.merchantRepository.findOne(id);
+    if (!merchant) {
+      throw new NotFoundException('Rider not found');
+    }
+    merchant.name = merchantUpdateDto.name;
+    merchant.name = merchantUpdateDto.name;
+    merchant.address = merchantUpdateDto.address;
+    merchant.contact_number = merchantUpdateDto.contact_number;
+
+    try {
+      merchant.save();
+    } catch (err) {
+      throw new HttpException('Something wrong', 500);
+    }
+    return merchant;
+  }
 
   // Merchant List
   async merchantList(): Promise<IMerchant[]> {

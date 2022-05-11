@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Parcel } from 'src/entities/parcel.entity';
 import { getRepository } from 'typeorm';
+import { RiderUpdateDto } from './rider-update.dto';
 import { IRider } from './rider.interface';
 import { RiderRepository } from './rider.repository';
 
@@ -11,9 +12,41 @@ export class RiderService {
     @InjectRepository(RiderRepository)
     private riderRepository: RiderRepository,
   ) {}
+
+  // Riders profile
+  async riderProfile(id: number): Promise<IRider> {
+    const rider = await this.riderRepository.findOne(id);
+    if (!rider) {
+      throw new NotFoundException('Rider not found');
+    }
+    return rider;
+  }
+
+  // Riders profile update
+  async riderProfileUpdate(
+    id: number,
+    riderUpdateDto: RiderUpdateDto,
+  ): Promise<IRider> {
+    const rider = await this.riderRepository.findOne(id);
+    if (!rider) {
+      throw new NotFoundException('Rider not found');
+    }
+    rider.name = riderUpdateDto.name;
+    rider.address = riderUpdateDto.address;
+    rider.contact_number = riderUpdateDto.contact_number;
+
+    try {
+      rider.save();
+    } catch (err) {
+      throw new HttpException('Something wrong', 500);
+    }
+    return rider;
+  }
+
   // Rider List
   async riderList(): Promise<IRider[]> {
     const rider = await this.riderRepository.find({ relations: ['branch'] });
+    console.log(rider);
     const riderNew = [];
     rider.map((value) => {
       const response: IRider = {
