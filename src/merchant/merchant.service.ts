@@ -3,6 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MerchantUpdateDto } from './merchant-update.dto';
 import { IMerchant } from './merchant.interface';
 import { MerchantRepository } from './merchant.repository';
+import * as bcrypt from 'bcrypt';
+import { hashPassword } from 'src/common/util';
+import { ChangePasswordDto } from 'src/common/change-password.dto';
 
 @Injectable()
 export class MerchantService {
@@ -13,9 +16,10 @@ export class MerchantService {
 
   // Merchants profile
   async merchantProfile(id: number): Promise<IMerchant> {
+    console.log(id);
     const merchant = await this.merchantRepository.findOne(id);
     if (!merchant) {
-      throw new NotFoundException('Rider not found');
+      throw new NotFoundException('Merchant not found');
     }
     return merchant;
   }
@@ -61,5 +65,23 @@ export class MerchantService {
       newMerchants.push(response);
     });
     return newMerchants;
+  }
+
+  // Cgange password
+  async changePassword(id, changePasswordDto: ChangePasswordDto) {
+    const { oldPassword, newPassword } = changePasswordDto;
+    const merchant = await this.merchantRepository.findOne(id);
+    if (!merchant) {
+      throw new NotFoundException('Merchant not found');
+    }
+    const isMatched = await merchant.validateMerchantPassword(oldPassword);
+    if (isMatched) {
+      merchant.salt = await bcrypt.genSalt();
+      merchant.password = await hashPassword(newPassword, merchant.salt);
+      await merchant.save();
+      return merchant;
+    } else {
+      throw new NotFoundException("Old password didn't match");
+    }
   }
 }

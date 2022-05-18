@@ -10,6 +10,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ChangePasswordDto } from 'src/common/change-password.dto';
 import { District } from 'src/entities/district.entity';
 import { Upazila } from 'src/entities/upazila.entity';
 import { DistrictDto } from 'src/repositories/district.repository';
@@ -33,8 +34,8 @@ export class AdminController {
 
   // Admins profile
   @Get('profile/:id')
-  ridersProfile(@Param('admin_id') admin_id): Promise<IAdmin> {
-    return this.adminService.adminProfile(admin_id);
+  ridersProfile(@Param('id') id): Promise<IAdmin> {
+    return this.adminService.adminProfile(id);
   }
 
   // Admins profile update
@@ -72,5 +73,14 @@ export class AdminController {
     @Body(ValidationPipe) upazilaDto: UpazilaDto,
   ): Promise<Upazila> {
     return this.adminService.createUpazila(upazilaDto);
+  }
+
+  // Change Password
+  @Post('change-password/:id')
+  changePassword(
+    @Param('id') id,
+    @Body(ValidationPipe) changePasswordDto: ChangePasswordDto,
+  ) {
+    return this.adminService.changePassword(id, changePasswordDto);
   }
 }

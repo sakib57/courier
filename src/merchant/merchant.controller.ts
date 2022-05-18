@@ -5,9 +5,12 @@ import {
   HttpStatus,
   Param,
   Patch,
+  Post,
   Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ChangePasswordDto } from 'src/common/change-password.dto';
 import { Parcel, PickupStatus } from 'src/entities/parcel.entity';
 import { ParcelService } from 'src/parcel/parcel.service';
 import { MerchantUpdateDto } from './merchant-update.dto';
@@ -38,8 +41,8 @@ export class MerchantController {
 
   // Merchants profile
   @Get('profile/:id')
-  merchantProfile(@Param('merchant_id') merchant_id): Promise<IMerchant> {
-    return this.merchantService.merchantProfile(merchant_id);
+  merchantProfile(@Param('id') id): Promise<IMerchant> {
+    return this.merchantService.merchantProfile(id);
   }
 
   // Merchants profile update
@@ -70,5 +73,14 @@ export class MerchantController {
     @Query() query: PickupStatus,
   ): Promise<Parcel[]> {
     return this.parcelService.merchantsDeliveryParcelList(merchant_id, query);
+  }
+
+  // Change Password
+  @Post('change-password/:id')
+  changePassword(
+    @Param('id') id,
+    @Body(ValidationPipe) changePasswordDto: ChangePasswordDto,
+  ) {
+    return this.merchantService.changePassword(id, changePasswordDto);
   }
 }

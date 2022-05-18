@@ -54,10 +54,10 @@ export class BranchController {
   // Branch profile update
   @Patch('profile/update/:id')
   branchProfileUpdate(
-    @Param('branch_id') branch_id,
+    @Param('id') id,
     @Body() branchUpdateDto: BranchUpdateDto,
   ): Promise<IBranch> {
-    return this.branchService.branchProfileUpdate(branch_id, branchUpdateDto);
+    return this.branchService.branchProfileUpdate(id, branchUpdateDto);
   }
 
   // Pickup Parcel List

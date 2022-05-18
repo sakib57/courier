@@ -13,6 +13,9 @@ import {
 import { AdminUpdateDto } from './admin-update.dto';
 import { IAdmin } from './admin.interface';
 import { AdminRepository } from './admin.repository';
+import * as bcrypt from 'bcrypt';
+import { hashPassword } from 'src/common/util';
+import { ChangePasswordDto } from 'src/common/change-password.dto';
 
 @Injectable()
 export class AdminService {
@@ -73,5 +76,23 @@ export class AdminService {
   // Create Upazila
   async createUpazila(upazilaDto: UpazilaDto) {
     return this.upazilaRepository.createUpazila(upazilaDto);
+  }
+
+  // Cgange password
+  async changePassword(id, changePasswordDto: ChangePasswordDto) {
+    const { oldPassword, newPassword } = changePasswordDto;
+    const admin = await this.adminRepository.findOne(id);
+    if (!admin) {
+      throw new NotFoundException('Admin not found');
+    }
+    const isMatched = await admin.validatePassword(oldPassword);
+    if (isMatched) {
+      admin.salt = await bcrypt.genSalt();
+      admin.password = await hashPassword(newPassword, admin.salt);
+      await admin.save();
+      return admin;
+    } else {
+      throw new NotFoundException("Old password didn't match");
+    }
   }
 }

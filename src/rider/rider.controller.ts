@@ -5,9 +5,12 @@ import {
   HttpStatus,
   Param,
   Patch,
+  Post,
   Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ChangePasswordDto } from 'src/common/change-password.dto';
 import { Parcel } from 'src/entities/parcel.entity';
 import { RiderUpdateDto } from './rider-update.dto';
 import { IRider } from './rider.interface';
@@ -34,8 +37,8 @@ export class RiderController {
 
   // Riders profile
   @Get('profile/:id')
-  ridersProfile(@Param('rider_id') rider_id): Promise<IRider> {
-    return this.riderService.riderProfile(rider_id);
+  ridersProfile(@Param('id') id): Promise<IRider> {
+    return this.riderService.riderProfile(id);
   }
 
   // Riders profile update
@@ -63,5 +66,14 @@ export class RiderController {
     @Query() query,
   ): Promise<Parcel[]> {
     return this.riderService.ridersDeliveryParcels(rider_id, query);
+  }
+
+  // Change Password
+  @Post('change-password/:id')
+  changePassword(
+    @Param('id') id,
+    @Body(ValidationPipe) changePasswordDto: ChangePasswordDto,
+  ) {
+    return this.riderService.changePassword(id, changePasswordDto);
   }
 }
