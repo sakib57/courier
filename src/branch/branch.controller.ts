@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AssignDto } from 'src/common/assign.dto';
+import { ChangePasswordDto } from 'src/common/change-password.dto';
 import { Branch } from 'src/entities/branch.entity';
 import { Parcel, PickupStatus } from 'src/entities/parcel.entity';
 import { ParcelService } from 'src/parcel/parcel.service';
@@ -88,5 +89,14 @@ export class BranchController {
   @Post('assign/delivery')
   assignDelivery(@Body(ValidationPipe) assignDto: AssignDto) {
     return this.branchService.assignDelivery(assignDto);
+  }
+
+  // Change Password
+  @Post('change-password/:id')
+  changePassword(
+    @Param('id') id,
+    @Body(ValidationPipe) changePasswordDto: ChangePasswordDto,
+  ) {
+    return this.branchService.changePassword(id, changePasswordDto);
   }
 }

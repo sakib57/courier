@@ -8,12 +8,16 @@ import { IRider } from './rider.interface';
 import { RiderRepository } from './rider.repository';
 import * as bcrypt from 'bcrypt';
 import { hashPassword } from 'src/common/util';
+import { SearchQueryDto } from 'src/common/search-query.dto';
+import { BranchRepository } from 'src/branch/branch.repository';
 
 @Injectable()
 export class RiderService {
   constructor(
     @InjectRepository(RiderRepository)
     private riderRepository: RiderRepository,
+    @InjectRepository(BranchRepository)
+    private branchRepository: BranchRepository,
   ) {}
 
   // Riders profile
@@ -47,9 +51,17 @@ export class RiderService {
   }
 
   // Rider List
-  async riderList(): Promise<IRider[]> {
-    const rider = await this.riderRepository.find({ relations: ['branch'] });
-    console.log(rider);
+  async riderList(searchQueryDto: SearchQueryDto): Promise<IRider[]> {
+    const branch = await this.branchRepository.findOne(
+      searchQueryDto.branch_id,
+    );
+
+    const rider = await this.riderRepository.find({
+      where: {
+        branch: branch,
+      },
+      relations: ['branch'],
+    });
     const riderNew = [];
     rider.map((value) => {
       const response: IRider = {

@@ -10,6 +10,7 @@ import { IBranch } from './branch.interface';
 import { BranchRepository } from './branch.repository';
 import * as bcrypt from 'bcrypt';
 import { hashPassword } from 'src/common/util';
+import { ChangePasswordDto } from 'src/common/change-password.dto';
 
 @Injectable()
 export class BranchService {
@@ -77,5 +78,23 @@ export class BranchService {
   // Assign For Delivery
   async assignDelivery(assignDto: AssignDto): Promise<void> {
     return this.deliveryParcelRepository.assignForDelivery(assignDto);
+  }
+
+  // Cgange password
+  async changePassword(id, changePasswordDto: ChangePasswordDto) {
+    const { oldPassword, newPassword } = changePasswordDto;
+    const branch = await this.branchRepository.findOne(id);
+    if (!branch) {
+      throw new NotFoundException('Branch not found');
+    }
+    const isMatched = await branch.validateBranchPassword(oldPassword);
+    if (isMatched) {
+      branch.salt = await bcrypt.genSalt();
+      branch.user_password = await hashPassword(newPassword, branch.salt);
+      await branch.save();
+      return branch;
+    } else {
+      throw new NotFoundException("Old password didn't match");
+    }
   }
 }

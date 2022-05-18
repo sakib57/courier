@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ChangePasswordDto } from 'src/common/change-password.dto';
+import { SearchQueryDto } from 'src/common/search-query.dto';
 import { Parcel, PickupStatus } from 'src/entities/parcel.entity';
 import { ParcelService } from 'src/parcel/parcel.service';
 import { MerchantUpdateDto } from './merchant-update.dto';
@@ -35,8 +36,8 @@ export class MerchantController {
 
   //   Merchant List
   @Get('list')
-  merchantList(): Promise<IMerchant[]> {
-    return this.merchantService.merchantList();
+  merchantList(@Query() searchQueryDto: SearchQueryDto): Promise<IMerchant[]> {
+    return this.merchantService.merchantList(searchQueryDto);
   }
 
   // Merchants profile

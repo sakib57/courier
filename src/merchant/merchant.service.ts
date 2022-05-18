@@ -6,12 +6,16 @@ import { MerchantRepository } from './merchant.repository';
 import * as bcrypt from 'bcrypt';
 import { hashPassword } from 'src/common/util';
 import { ChangePasswordDto } from 'src/common/change-password.dto';
+import { SearchQueryDto } from 'src/common/search-query.dto';
+import { BranchRepository } from 'src/branch/branch.repository';
 
 @Injectable()
 export class MerchantService {
   constructor(
     @InjectRepository(MerchantRepository)
     private merchantRepository: MerchantRepository,
+    @InjectRepository(BranchRepository)
+    private branchRepository: BranchRepository,
   ) {}
 
   // Merchants profile
@@ -47,8 +51,15 @@ export class MerchantService {
   }
 
   // Merchant List
-  async merchantList(): Promise<IMerchant[]> {
+  async merchantList(searchQueryDto: SearchQueryDto): Promise<IMerchant[]> {
+    const branch = await this.branchRepository.findOne(
+      searchQueryDto.branch_id,
+    );
+
     const merchants = await this.merchantRepository.find({
+      where: {
+        branch: branch,
+      },
       relations: ['branch'],
     });
     const newMerchants = [];

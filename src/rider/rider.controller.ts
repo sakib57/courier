@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ChangePasswordDto } from 'src/common/change-password.dto';
+import { SearchQueryDto } from 'src/common/search-query.dto';
 import { Parcel } from 'src/entities/parcel.entity';
 import { RiderUpdateDto } from './rider-update.dto';
 import { IRider } from './rider.interface';
@@ -31,8 +32,8 @@ export class RiderController {
 
   //   Rider List
   @Get('list')
-  riderList(): Promise<IRider[]> {
-    return this.riderService.riderList();
+  riderList(@Query() searchQueryDto: SearchQueryDto): Promise<IRider[]> {
+    return this.riderService.riderList(searchQueryDto);
   }
 
   // Riders profile
