@@ -8,6 +8,8 @@ import { hashPassword } from 'src/common/util';
 import { ChangePasswordDto } from 'src/common/change-password.dto';
 import { SearchQueryDto } from 'src/common/search-query.dto';
 import { BranchRepository } from 'src/branch/branch.repository';
+import { MerchantWallet } from 'src/entities/merchant-wallet.entity';
+import { IMerchantWallet } from './merchant-wallet.interface';
 
 @Injectable()
 export class MerchantService {
@@ -20,12 +22,21 @@ export class MerchantService {
 
   // Merchants profile
   async merchantProfile(id: number): Promise<IMerchant> {
-    console.log(id);
     const merchant = await this.merchantRepository.findOne(id);
     if (!merchant) {
       throw new NotFoundException('Merchant not found');
     }
     return merchant;
+  }
+
+  // Merchants wallet
+  async merchantWallet(id: number): Promise<IMerchantWallet[]> {
+    const merchant = await this.merchantRepository.findOne(id);
+    const wallet = await MerchantWallet.find({
+      where: { merchant: merchant },
+      relations: ['parcel', 'merchant'],
+    });
+    return wallet;
   }
 
   // Merchants profile update
@@ -41,6 +52,8 @@ export class MerchantService {
     merchant.name = merchantUpdateDto.name;
     merchant.address = merchantUpdateDto.address;
     merchant.contact_number = merchantUpdateDto.contact_number;
+    merchant.in_city_rate = merchantUpdateDto.in_city_rate;
+    merchant.out_city_rate = merchantUpdateDto.out_city_rate;
 
     try {
       merchant.save();

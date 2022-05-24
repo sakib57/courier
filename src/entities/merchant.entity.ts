@@ -3,6 +3,7 @@ import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import { Branch } from './branch.entity';
 import { Parcel } from './parcel.entity';
+import { MerchantWallet } from './merchant-wallet.entity';
 
 @Entity()
 export class Merchant extends User {
@@ -15,6 +16,9 @@ export class Merchant extends User {
   @OneToMany(() => Parcel, (parcel) => parcel.merchant)
   parcels: Parcel[];
 
+  @OneToMany(() => MerchantWallet, (merchantWallet) => merchantWallet.merchant)
+  merchantWallets: MerchantWallet[];
+
   @Column()
   company_name: string;
 
@@ -23,6 +27,12 @@ export class Merchant extends User {
 
   @Column()
   contact_number: string;
+
+  @Column({ default: 0 })
+  in_city_rate: number;
+
+  @Column({ default: 0 })
+  out_city_rate: number;
 
   @Column()
   salt: string;

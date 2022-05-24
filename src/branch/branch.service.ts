@@ -11,6 +11,11 @@ import { BranchRepository } from './branch.repository';
 import * as bcrypt from 'bcrypt';
 import { hashPassword } from 'src/common/util';
 import { ChangePasswordDto } from 'src/common/change-password.dto';
+import { Parcel, PickupStatus } from 'src/entities/parcel.entity';
+import { Rider } from 'src/entities/rider.entity';
+import { PickupParcel } from 'src/entities/pickup-parcel.entity';
+import { Merchant } from 'src/entities/merchant.entity';
+import { MerchantWallet } from 'src/entities/merchant-wallet.entity';
 
 @Injectable()
 export class BranchService {
@@ -72,7 +77,36 @@ export class BranchService {
 
   // Assign For Pickup
   async assignPickup(assignDto: AssignDto): Promise<void> {
-    return this.pickupParcelRepository.assignForPickup(assignDto);
+    const { parcel_id, rider_id } = assignDto;
+    const parcel = await Parcel.findOne(parcel_id);
+    const rider = await Rider.findOne(rider_id);
+
+    if (!parcel) {
+      throw new NotFoundException('Parcel not found');
+    }
+    if (!rider) {
+      throw new NotFoundException('Rider not found');
+    }
+    const pickupParcel = new PickupParcel();
+    pickupParcel.parcel = parcel;
+    pickupParcel.rider = rider;
+    const merchant = await Merchant.findOne(parcel.merchant);
+    const merchantWallet = new MerchantWallet();
+    merchantWallet.parcel = parcel;
+    merchantWallet.merchant = merchant;
+    if (assignDto.is_inside_city) {
+      merchantWallet.amount = merchant.in_city_rate;
+    } else {
+      merchantWallet.amount = merchant.out_city_rate;
+    }
+    try {
+      await merchantWallet.save();
+      await pickupParcel.save();
+      parcel.pickup_status = PickupStatus.ASSIGNED;
+      await parcel.save();
+    } catch (error) {
+      throw new HttpException(`${error.sqlMessage}`, 404);
+    }
   }
 
   // Assign For Delivery

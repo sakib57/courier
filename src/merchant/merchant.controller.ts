@@ -15,6 +15,7 @@ import { SearchQueryDto } from 'src/common/search-query.dto';
 import { Parcel, PickupStatus } from 'src/entities/parcel.entity';
 import { ParcelService } from 'src/parcel/parcel.service';
 import { MerchantUpdateDto } from './merchant-update.dto';
+import { IMerchantWallet } from './merchant-wallet.interface';
 import { IMerchant } from './merchant.interface';
 import { MerchantService } from './merchant.service';
 
@@ -44,6 +45,12 @@ export class MerchantController {
   @Get('profile/:id')
   merchantProfile(@Param('id') id): Promise<IMerchant> {
     return this.merchantService.merchantProfile(id);
+  }
+
+  // Merchants profile
+  @Get('wallet/:id')
+  merchantWallet(@Param('id') id): Promise<IMerchantWallet[]> {
+    return this.merchantService.merchantWallet(id);
   }
 
   // Merchants profile update

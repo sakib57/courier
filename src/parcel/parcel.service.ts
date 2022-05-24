@@ -146,6 +146,9 @@ export class ParcelService {
       throw new NotFoundException('Parcel not found');
     }
     parcel.pickup_status = status;
+    if (status == 'Stored') {
+      parcel.pickup_date = new Date(Date.now());
+    }
 
     try {
       parcel.save();
@@ -165,7 +168,9 @@ export class ParcelService {
       throw new NotFoundException('Parcel not found');
     }
     parcel.delivery_status = status;
-
+    if (status == 'Delivered') {
+      parcel.pickup_date = new Date(Date.now());
+    }
     try {
       parcel.save();
     } catch (err) {

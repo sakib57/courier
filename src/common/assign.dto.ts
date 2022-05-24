@@ -9,4 +9,8 @@ export class AssignDto {
   @IsNotEmpty()
   @ApiProperty()
   rider_id: number;
+
+  @IsNotEmpty()
+  @ApiProperty()
+  is_inside_city: boolean;
 }

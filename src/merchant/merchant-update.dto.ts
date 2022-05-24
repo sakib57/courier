@@ -17,4 +17,12 @@ export class MerchantUpdateDto {
   @ApiProperty()
   @IsNotEmpty()
   contact_number: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  in_city_rate: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  out_city_rate: number;
 }

@@ -11,6 +11,7 @@ import { Merchant } from 'src/entities/merchant.entity';
 import { Parcel } from 'src/entities/parcel.entity';
 import { PickupParcel } from 'src/entities/pickup-parcel.entity';
 import { DeliveryParcel } from 'src/entities/delivery-parcel.entity';
+import { MerchantWallet } from 'src/entities/merchant-wallet.entity';
 
 // const env = process.env.NODE_ENV || "dev";
 const dotenv_path = path.resolve(process.cwd(), `.env`);
@@ -52,6 +53,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     Parcel,
     PickupParcel,
     DeliveryParcel,
+    MerchantWallet,
   ],
   synchronize: true,
 };

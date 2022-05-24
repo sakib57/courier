@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { Branch } from './branch.entity';
 import { DeliveryParcel } from './delivery-parcel.entity';
+import { MerchantWallet } from './merchant-wallet.entity';
 import { Merchant } from './merchant.entity';
 import { PickupParcel } from './pickup-parcel.entity';
 
@@ -83,8 +84,17 @@ export class Parcel extends BaseEntity {
   @OneToOne(() => PickupParcel, (pickupParcel) => pickupParcel.parcel)
   pickupParcel: PickupParcel;
 
+  @CreateDateColumn({ default: null })
+  pickup_date: Date;
+
   @OneToOne(() => DeliveryParcel, (deliveryParcel) => deliveryParcel.parcel)
   deliveryParcel: DeliveryParcel;
+
+  @CreateDateColumn({ default: null })
+  delivery_date: Date;
+
+  @OneToOne(() => MerchantWallet, (merchantWallet) => merchantWallet.parcel)
+  merchantWallet: MerchantWallet;
 
   @CreateDateColumn()
   created_at: Date;
