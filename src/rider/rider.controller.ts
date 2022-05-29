@@ -45,10 +45,10 @@ export class RiderController {
   // Riders profile update
   @Patch('profile/update/:id')
   ridersProfileUpdate(
-    @Param('rider_id') rider_id,
+    @Param('id') id,
     @Body() riderUpdateDto: RiderUpdateDto,
   ): Promise<IRider> {
-    return this.riderService.riderProfileUpdate(rider_id, riderUpdateDto);
+    return this.riderService.riderProfileUpdate(id, riderUpdateDto);
   }
 
   // Rider's pickup parcels

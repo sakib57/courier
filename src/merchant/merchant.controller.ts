@@ -56,13 +56,10 @@ export class MerchantController {
   // Merchants profile update
   @Patch('profile/update/:id')
   merchantProfileUpdate(
-    @Param('merchant_id') merchant_id,
+    @Param('id') id,
     @Body() merchantUpdateDto: MerchantUpdateDto,
   ): Promise<IMerchant> {
-    return this.merchantService.merchantProfileUpdate(
-      merchant_id,
-      merchantUpdateDto,
-    );
+    return this.merchantService.merchantProfileUpdate(id, merchantUpdateDto);
   }
 
   // Pickup Parcel List

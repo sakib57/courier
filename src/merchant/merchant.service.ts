@@ -46,7 +46,7 @@ export class MerchantService {
   ): Promise<IMerchant> {
     const merchant = await this.merchantRepository.findOne(id);
     if (!merchant) {
-      throw new NotFoundException('Rider not found');
+      throw new NotFoundException('Merchant not found');
     }
     merchant.name = merchantUpdateDto.name;
     merchant.name = merchantUpdateDto.name;

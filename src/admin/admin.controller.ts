@@ -41,10 +41,10 @@ export class AdminController {
   // Admins profile update
   @Patch('profile/update/:id')
   ridersProfileUpdate(
-    @Param('admin_id') admin_id,
+    @Param('id') id,
     @Body() riderUpdateDto: AdminUpdateDto,
   ): Promise<IAdmin> {
-    return this.adminService.adminProfileUpdate(admin_id, riderUpdateDto);
+    return this.adminService.adminProfileUpdate(id, riderUpdateDto);
   }
 
   // District List
