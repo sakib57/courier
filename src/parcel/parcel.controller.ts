@@ -6,14 +6,19 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
+  UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Parcel } from 'src/entities/parcel.entity';
 import { UpdateDeliveryStatusDto, UpdatePickupStatusDto } from './dto';
 import { ParcelDto } from './dto/parcel.dto';
 import { ParcelUpdateDto } from './dto/parcel.update.dto';
 import { ParcelService } from './parcel.service';
+import { XlsxParcelDTO } from './dto/xlsx-parcel.dto';
 
 @ApiTags('Parcel')
 @ApiResponse({
@@ -38,6 +43,28 @@ export class ParcelController {
   @Post('create')
   createParcelReq(@Body(ValidationPipe) parcelDto: ParcelDto) {
     return this.parcelService.createParcelReq(parcelDto);
+  }
+
+  // Parcel req create
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './temp',
+        filename: (req, file, cb) => {
+          const fileName = 'import';
+          const extension = '.xlsx';
+          cb(null, `${fileName}${extension}`);
+        },
+      }),
+    }),
+  )
+  @Post('create/xlsx')
+  createParcelReqXlsx(
+    @Body(ValidationPipe) xlsxParcelDTO: XlsxParcelDTO,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    xlsxParcelDTO.file = file.path;
+    return this.parcelService.createParcelReqXlsx(xlsxParcelDTO);
   }
 
   // Parcel req create

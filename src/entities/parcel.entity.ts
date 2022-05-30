@@ -84,13 +84,13 @@ export class Parcel extends BaseEntity {
   @OneToOne(() => PickupParcel, (pickupParcel) => pickupParcel.parcel)
   pickupParcel: PickupParcel;
 
-  @CreateDateColumn({ default: null })
+  @Column({ default: null })
   pickup_date: Date;
 
   @OneToOne(() => DeliveryParcel, (deliveryParcel) => deliveryParcel.parcel)
   deliveryParcel: DeliveryParcel;
 
-  @CreateDateColumn({ default: null })
+  @Column({ default: null })
   delivery_date: Date;
 
   @OneToOne(() => MerchantWallet, (merchantWallet) => merchantWallet.parcel)

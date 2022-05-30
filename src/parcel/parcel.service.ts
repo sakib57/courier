@@ -12,6 +12,11 @@ import {
 } from './dto';
 import { ParcelUpdateDto } from './dto/parcel.update.dto';
 import { ParcelRepository } from './parcel.repository';
+import * as Xlsx from 'xlsx';
+import * as fs from 'fs';
+import { XlsxParcelDTO } from './dto/xlsx-parcel.dto';
+import { Merchant } from 'src/entities/merchant.entity';
+import { Branch } from 'src/entities/branch.entity';
 
 @Injectable()
 export class ParcelService {
@@ -125,6 +130,53 @@ export class ParcelService {
   // Parcel req create
   async createParcelReq(parcelDto: ParcelDto): Promise<Parcel> {
     return this.parcelRepository.createParcelReq(parcelDto);
+  }
+
+  // Bulk Xlsx Parcel req create
+  async createParcelReqXlsx(xlsxParcelDTO: XlsxParcelDTO): Promise<any> {
+    const file = Xlsx.readFile('./temp/import.xlsx');
+    const sheets = file.SheetNames;
+    const data = [];
+    for (let i = 0; i < sheets.length; i++) {
+      const sheetName = sheets[i];
+      const sheetData = Xlsx.utils.sheet_to_json(file.Sheets[sheetName]);
+      sheetData.forEach((v) => {
+        data.push(v);
+      });
+    }
+    const merchant = await Merchant.findOne({ id: xlsxParcelDTO.id });
+    if (!merchant) {
+      throw new NotFoundException('Merchant not found');
+    }
+
+    let d_branch = null;
+    if (xlsxParcelDTO.d_branch_id) {
+      d_branch = await Branch.findOne({ id: xlsxParcelDTO.d_branch_id });
+      if (!d_branch) {
+        throw new NotFoundException('Branch not found');
+      }
+    }
+
+    console.log(data);
+    data.forEach(async (v) => {
+      const parcel = new Parcel();
+      parcel.merchant = merchant;
+      parcel.d_branch = d_branch;
+      parcel.pickup_location = v.pickup_location;
+      parcel.customer_name = v.customer_name;
+      parcel.customer_phone = v.customer_phone;
+      parcel.customer_address = v.customer_address;
+      parcel.collect_amount = v.collect_amount;
+      parcel.weight = v.weight;
+      parcel.delivery_instruction = v.delivery_instruction;
+
+      try {
+        await parcel.save();
+      } catch (error) {
+        console.log(error);
+      }
+    });
+    fs.unlinkSync('./temp/import.xlsx');
   }
 
   // Parcel req update
