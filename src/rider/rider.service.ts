@@ -55,13 +55,21 @@ export class RiderService {
     const branch = await this.branchRepository.findOne(
       searchQueryDto.branch_id,
     );
+    let rider = null;
 
-    const rider = await this.riderRepository.find({
-      where: {
-        branch: branch,
-      },
-      relations: ['branch'],
-    });
+    if (branch) {
+      rider = await this.riderRepository.find({
+        where: {
+          branch: branch,
+        },
+        relations: ['branch'],
+      });
+    } else {
+      rider = await this.riderRepository.find({
+        relations: ['branch'],
+      });
+    }
+
     const riderNew = [];
     rider.map((value) => {
       const response: IRider = {

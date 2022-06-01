@@ -68,13 +68,20 @@ export class MerchantService {
     const branch = await this.branchRepository.findOne(
       searchQueryDto.branch_id,
     );
+    let merchants = null;
+    if (branch) {
+      merchants = await this.merchantRepository.find({
+        where: {
+          branch: branch,
+        },
+        relations: ['branch'],
+      });
+    } else {
+      merchants = await this.merchantRepository.find({
+        relations: ['branch'],
+      });
+    }
 
-    const merchants = await this.merchantRepository.find({
-      where: {
-        branch: branch,
-      },
-      relations: ['branch'],
-    });
     const newMerchants = [];
     merchants.map((value) => {
       const response: IMerchant = {
