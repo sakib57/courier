@@ -52,9 +52,9 @@ export class RiderService {
 
   // Rider List
   async riderList(searchQueryDto: SearchQueryDto): Promise<IRider[]> {
-    const branch = await this.branchRepository.findOne(
-      searchQueryDto.branch_id,
-    );
+    const branch = await this.branchRepository.findOne({
+      id: searchQueryDto.branch_id,
+    });
     let rider = null;
 
     if (branch) {

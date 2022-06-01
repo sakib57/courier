@@ -65,10 +65,12 @@ export class MerchantService {
 
   // Merchant List
   async merchantList(searchQueryDto: SearchQueryDto): Promise<IMerchant[]> {
-    const branch = await this.branchRepository.findOne(
-      searchQueryDto.branch_id,
-    );
+    console.log(searchQueryDto.branch_id);
+    const branch = await this.branchRepository.findOne({
+      id: searchQueryDto.branch_id,
+    });
     let merchants = null;
+    console.log(branch);
     if (branch) {
       merchants = await this.merchantRepository.find({
         where: {
