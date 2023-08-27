@@ -156,6 +156,55 @@ export class BranchService {
     }
   }
 
+      // Cancel For Delivery
+      async cancelDelivery(assignDto: AssignDto): Promise<void> {
+        const { parcel_id, rider_id } = assignDto;
+        const parcel = await Parcel.findOne(parcel_id);
+        const rider = await Rider.findOne(rider_id);
+    
+        if (!parcel) {
+          throw new NotFoundException('Parcel not found');
+        }
+        if (!rider) {
+          throw new NotFoundException('Rider not found');
+        }
+        const deliveryParcel = new DeliveryParcel();
+        deliveryParcel.parcel = parcel;
+        deliveryParcel.rider = rider;
+        try {
+          await deliveryParcel.save();
+          parcel.delivery_status = DeliveryStatus.CANCELLED;
+          await parcel.save();
+        } catch (error) {
+          throw new HttpException(`${error.sqlMessage}`, 404);
+        }
+      }
+
+          // Cancel For Pickup
+    async cancelPickup(assignDto: AssignDto): Promise<void> {
+      const { parcel_id, rider_id } = assignDto;
+      const parcel = await Parcel.findOne(parcel_id);
+      const rider = await Rider.findOne(rider_id);
+  
+      if (!parcel) {
+        throw new NotFoundException('Parcel not found');
+      }
+      if (!rider) {
+        throw new NotFoundException('Rider not found');
+      }
+      const pickupParcel = new PickupParcel();
+      pickupParcel.parcel = parcel;
+      pickupParcel.rider = rider;
+      const merchant = await Merchant.findOne(parcel.merchant);
+      try {
+        await pickupParcel.save();
+        parcel.pickup_status = PickupStatus.CANCELLED;
+        await parcel.save();
+      } catch (error) {
+        throw new HttpException(`${error.sqlMessage}`, 404);
+      }
+    }
+
   // Assign For Return
   async assignReturn(assignDto: AssignDto): Promise<void> {
     const { parcel_id, rider_id } = assignDto;

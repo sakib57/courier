@@ -35,6 +35,7 @@ export enum DeliveryStatus {
   RETURNED = 'Returned',
   FAILED = 'Failed',
   RESTORED = 'Restored',
+  CANCELLED = 'Cancelled',
 }
 
 @Entity()
