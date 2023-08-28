@@ -20,6 +20,7 @@ import { PaymentRequest } from 'src/entities/payment-request.entity';
 import { BranchOperator } from 'src/entities/branch-operator.entity';
 import { District } from 'src/entities/district.entity';
 import { ReturnParcel } from 'src/entities/return-parcel.entity';
+import { CancelDto } from 'src/common/cancel.dto';
 
 @Injectable()
 export class BranchService {
@@ -157,8 +158,8 @@ export class BranchService {
   }
 
       // Cancel For Delivery
-      async cancelDelivery(assignDto: AssignDto): Promise<void> {
-        const { parcel_id, rider_id } = assignDto;
+      async cancelDelivery(cancelDto: CancelDto): Promise<void> {
+        const { parcel_id, rider_id } = cancelDto;
         const parcel = await Parcel.findOne(parcel_id);
         const rider = await Rider.findOne(rider_id);
     
@@ -173,16 +174,18 @@ export class BranchService {
         deliveryParcel.rider = rider;
         try {
           await deliveryParcel.save();
-          parcel.delivery_status = DeliveryStatus.CANCELLED;
+          parcel.delivery_status = DeliveryStatus.PENDIGN;
           await parcel.save();
         } catch (error) {
           throw new HttpException(`${error.sqlMessage}`, 404);
         }
       }
 
+      
+
           // Cancel For Pickup
-    async cancelPickup(assignDto: AssignDto): Promise<void> {
-      const { parcel_id, rider_id } = assignDto;
+    async cancelPickup(cancelDto: CancelDto): Promise<void> {
+      const { parcel_id, rider_id } = cancelDto;
       const parcel = await Parcel.findOne(parcel_id);
       const rider = await Rider.findOne(rider_id);
   
@@ -198,7 +201,7 @@ export class BranchService {
       const merchant = await Merchant.findOne(parcel.merchant);
       try {
         await pickupParcel.save();
-        parcel.pickup_status = PickupStatus.CANCELLED;
+        parcel.pickup_status = PickupStatus.PENDIGN;
         await parcel.save();
       } catch (error) {
         throw new HttpException(`${error.sqlMessage}`, 404);

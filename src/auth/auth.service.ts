@@ -110,7 +110,7 @@ export class AuthService {
   }
 
   // Merchant SignIn
-  async merchantSignIn(signInDto: SignInDto): Promise<string> {
+  async merchantSignIn(signInDto: SignInDto): Promise<{ accessToken: string }> {
     const { email, password } = signInDto;
     const merchant = await Merchant.findOne({ email });
     let merchantData = null;
@@ -123,11 +123,13 @@ export class AuthService {
         permissions: merchant.permissions,
       };
     }
-    if (!merchantData) {
+    if (!merchantData)  {
       throw new UnauthorizedException('Invalid Credentials');
     }
     const accessToken = this.jwtService.sign(merchantData);
-    return accessToken;
+    return {accessToken};
+
+
   }
 
   // Rider SignUp
@@ -161,7 +163,7 @@ export class AuthService {
   }
 
   // Rider SignIn
-  async riderSignIn(signInDto: SignInDto): Promise<string> {
+  async riderSignIn(signInDto: SignInDto): Promise<{ accessToken: string }> {
     const { email, password } = signInDto;
     const rider = await Rider.findOne({ email });
     let riderData = null;
@@ -178,7 +180,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid Credentials');
     }
     const accessToken = this.jwtService.sign(riderData);
-    return accessToken;
+    return {accessToken};
   }
 
   // Branch SignIn
@@ -209,7 +211,11 @@ export class AuthService {
     const accessToken = this.jwtService.sign(branchOperatorData);
     return {
       branch_id: branchOperator.branch,
-      token: accessToken,
+      accessToken: accessToken,
     };
   }
 }
+function generateAccessToken(merchantData: any, any: any) {
+  throw new Error('Function not implemented.');
+}
+
