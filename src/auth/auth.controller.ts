@@ -48,7 +48,7 @@ export class AuthController {
   }
 
   @Post('merchant/signin')
-  merchantSignIn(@Body() signInDto: SignInDto): Promise<string> {
+  merchantSignIn(@Body() signInDto: SignInDto): Promise<{ accessToken: string }> {
     return this.authService.merchantSignIn(signInDto);
   }
 
@@ -58,12 +58,12 @@ export class AuthController {
   }
 
   @Post('rider/signin')
-  riderSignIn(@Body() signInDto: SignInDto): Promise<string> {
+  riderSignIn(@Body() signInDto: SignInDto): Promise<{ accessToken: string }> {
     return this.authService.riderSignIn(signInDto);
   }
 
   @Post('branch/signin')
-  branchSignIn(@Body() signInDto: SignInDto): Promise<string> {
+  branchSignIn(@Body() signInDto: SignInDto): Promise<{ accessToken: string }> {
     return this.authService.branchSignIn(signInDto);
   }
 }
