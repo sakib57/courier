@@ -1,26 +1,26 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { District } from 'src/entities/district.entity';
 import { Upazila } from 'src/entities/upazila.entity';
 import {
   DistrictDto,
-  DistrictRepository,
   UpdateDistrictDto,
 } from 'src/repositories/district.repository';
 import {
   UpazilaDto,
-  UpazilaRepository,
   UpdateUpazilaDto,
 } from 'src/repositories/upazila.repository';
 import { AdminUpdateDto } from './admin-update.dto';
 import { IAdmin } from './admin.interface';
-import { AdminRepository } from './admin.repository';
 import * as bcrypt from 'bcrypt';
 import { hashPassword } from 'src/common/util';
 import { ChangePasswordDto } from 'src/common/change-password.dto';
 import { Admin } from 'src/entities/admin.entity';
 import { Road } from 'src/entities/road.entity';
 import { RoadDto, UpdateRoadDto } from 'src/dto/road.dto';
+import { Branch } from 'src/entities/branch.entity';
+import { Merchant } from 'src/entities/merchant.entity';
+import { PickupRequest } from 'src/entities/pickup-request.entity';
+import { DeliveryStatus, Parcel } from 'src/entities/parcel.entity';
 
 @Injectable()
 export class AdminService {
@@ -209,5 +209,30 @@ export class AdminService {
     } else {
       throw new NotFoundException("Old password didn't match");
     }
+  }
+
+  // Admin Dashboard
+  async adminDashboard() {
+    const totalBranch = (await Branch.find()).length;
+    const totalMerchant = (await Merchant.find()).length;
+    const totalRider = (await Branch.find()).length;
+    const totalPickupRequest = await PickupRequest.find();
+    const totalParcel = await Parcel.find();
+    let totalCollectAmount = 0;
+
+    totalParcel.map((value) => {
+      if (value.delivery_status == DeliveryStatus.DELIVERED) {
+        totalCollectAmount += parseFloat(value.collect_amount.toString());
+      }
+    });
+
+    return {
+      branch: totalBranch,
+      merchant: totalMerchant,
+      rider: totalRider,
+      pickupRequest: totalPickupRequest,
+      parcel: totalParcel,
+      collectAmount: totalCollectAmount,
+    };
   }
 }

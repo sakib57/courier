@@ -135,4 +135,10 @@ export class AdminController {
   ) {
     return this.adminService.changePassword(id, changePasswordDto);
   }
+
+  // Dashboard
+  @Get('dashboard')
+  dashboard() {
+    return this.adminService.adminDashboard();
+  }
 }
