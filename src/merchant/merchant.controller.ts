@@ -117,4 +117,10 @@ export class MerchantController {
   branchCount() {
     return this.merchantService.count();
   }
+
+  // Dashboard
+  @Get('dashboard/:merchant_id')
+  dashboard(@Param() param: number, @Query() query: any) {
+    return this.merchantService.merchantDashboard(param, query);
+  }
 }

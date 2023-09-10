@@ -12,7 +12,7 @@ import {
   PickupStatus,
 } from 'src/entities/parcel.entity';
 import { Rider } from 'src/entities/rider.entity';
-import { getRepository } from 'typeorm';
+import { Between, getRepository } from 'typeorm';
 import { PickupParcel } from 'src/entities/pickup-parcel.entity';
 import { Merchant } from 'src/entities/merchant.entity';
 import { DeliveryParcel } from 'src/entities/delivery-parcel.entity';
@@ -21,6 +21,7 @@ import { BranchOperator } from 'src/entities/branch-operator.entity';
 import { District } from 'src/entities/district.entity';
 import { ReturnParcel } from 'src/entities/return-parcel.entity';
 import { CancelDto } from 'src/common/cancel.dto';
+import { PickupRequest } from 'src/entities/pickup-request.entity';
 
 @Injectable()
 export class BranchService {
@@ -269,5 +270,53 @@ export class BranchService {
       console.error('Error while fetching count:', error);
       throw error;
     }
+  }
+
+  // Dashboard
+  async branchDashboard(param: any, query: any) {
+    const branch = await Branch.findOne({ id: param.branch_id });
+    let totalPickupRequest: any;
+    let totalParcel: any;
+    let totalCollectAmount = 0;
+
+    const totalMerchant = await Merchant.find({ branch: branch });
+    const totalRider = await Rider.find({ branch: branch });
+    const totalOperator = await BranchOperator.find({ branch: branch });
+
+    if (query.start_date && query.end_date) {
+      console.log('have both');
+      totalPickupRequest = await PickupRequest.find({
+        where: {
+          branch: branch,
+          created_at: Between(query.start_date, query.end_date),
+        },
+      });
+
+      totalParcel = await Parcel.find({
+        where: {
+          i_branch: branch,
+          created_at: Between(query.start_date, query.end_date),
+        },
+      });
+    } else {
+      totalPickupRequest = await PickupRequest.find({
+        branch: branch,
+      });
+      totalParcel = await Parcel.find({ i_branch: branch });
+    }
+
+    totalParcel.map((value: any) => {
+      if (value.delivery_status == DeliveryStatus.DELIVERED) {
+        totalCollectAmount += parseFloat(value.collect_amount.toString());
+      }
+    });
+    return {
+      totalMerchant: totalMerchant,
+      totalRider: totalRider,
+      totalOperator: totalOperator,
+      pickupRequest: totalPickupRequest,
+      parcel: totalParcel,
+      collectAmount: totalCollectAmount,
+    };
   }
 }

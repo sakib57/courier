@@ -20,7 +20,8 @@ import {
 } from 'src/entities/payment-request.entity';
 import { PaymentParcel } from 'src/entities/payment-parcel.entity';
 import { UpdatePaymentRequestDto } from './update-payment-request.dto';
-import { getRepository } from 'typeorm';
+import { Between, getRepository } from 'typeorm';
+import { PickupRequest } from 'src/entities/pickup-request.entity';
 
 @Injectable()
 export class MerchantService {
@@ -254,5 +255,47 @@ export class MerchantService {
       console.error('Error while fetching count:', error);
       throw error;
     }
+  }
+
+  // Dashboard
+  async merchantDashboard(param: any, query: any) {
+    const merchant = await Merchant.findOne({ id: param.merchant_id });
+    let totalPickupRequest: any;
+    let totalParcel: any;
+    let totalCollectAmount = 0;
+
+    if (query.start_date && query.end_date) {
+      console.log('have both');
+      totalPickupRequest = await PickupRequest.find({
+        where: {
+          merchant: merchant,
+          // $in: { created_at: [query.start_date, query.end_date] },
+          created_at: Between(query.start_date, query.end_date),
+        },
+      });
+
+      totalParcel = await Parcel.find({
+        where: {
+          merchant: merchant,
+          created_at: Between(query.start_date, query.end_date),
+        },
+      });
+    } else {
+      totalPickupRequest = await PickupRequest.find({
+        merchant: merchant,
+      });
+      totalParcel = await Parcel.find({ merchant: merchant });
+    }
+
+    totalParcel.map((value: any) => {
+      if (value.delivery_status == DeliveryStatus.DELIVERED) {
+        totalCollectAmount += parseFloat(value.collect_amount.toString());
+      }
+    });
+    return {
+      pickupRequest: totalPickupRequest,
+      parcel: totalParcel,
+      collectAmount: totalCollectAmount,
+    };
   }
 }

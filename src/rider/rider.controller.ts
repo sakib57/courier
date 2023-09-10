@@ -96,4 +96,10 @@ export class RiderController {
   branchCount() {
     return this.riderService.count();
   }
+
+  // Dashboard
+  @Get('dashboard/:rider_id')
+  dashboard(@Param() param: number, @Query() query: any) {
+    return this.riderService.riderDashboard(param, query);
+  }
 }

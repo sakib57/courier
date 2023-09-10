@@ -1,11 +1,9 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { ChangePasswordDto } from 'src/common/change-password.dto';
-import { Parcel } from 'src/entities/parcel.entity';
-import { getRepository } from 'typeorm';
+import { DeliveryStatus, Parcel } from 'src/entities/parcel.entity';
+import { Between, getRepository } from 'typeorm';
 import { RiderUpdateDto } from './rider-update.dto';
 import { IRider } from './rider.interface';
-import { RiderRepository } from './rider.repository';
 import * as bcrypt from 'bcrypt';
 import { hashPassword } from 'src/common/util';
 import { SearchQueryDto } from 'src/common/search-query.dto';
@@ -13,6 +11,8 @@ import { Rider } from 'src/entities/rider.entity';
 import { Branch } from 'src/entities/branch.entity';
 import { RideDto } from './ride.dto';
 import { Ride } from 'src/entities/ride.entity';
+import { PickupRequest } from 'src/entities/pickup-request.entity';
+import { PickupParcel } from 'src/entities/pickup-parcel.entity';
 
 @Injectable()
 export class RiderService {
@@ -213,5 +213,51 @@ export class RiderService {
       console.error('Error while fetching count:', error);
       throw error;
     }
+  }
+
+  // Dashboard
+  async riderDashboard(param: any, query: any) {
+    const rider = await Rider.findOne({ id: param.rider_id });
+    let totalPickupRequest: any;
+    let totalParcel: any;
+    let totalCollectAmount = 0;
+
+    if (query.start_date && query.end_date) {
+      console.log('have both');
+      totalPickupRequest = await PickupRequest.find({
+        where: {
+          rider: rider,
+          created_at: Between(query.start_date, query.end_date),
+        },
+      });
+
+      totalParcel = await PickupParcel.find({
+        where: {
+          rider: rider,
+          created_at: Between(query.start_date, query.end_date),
+        },
+        relations: ['parcel'],
+      });
+    } else {
+      totalPickupRequest = await PickupRequest.find({
+        rider: rider,
+      });
+      totalParcel = await PickupParcel.find({
+        relations: ['parcel'],
+      });
+    }
+
+    totalParcel.map((tParcel: any) => {
+      tParcel.parcel.map((parcel: any) => {
+        if (parcel.delivery_status == DeliveryStatus.DELIVERED) {
+          totalCollectAmount += parseFloat(parcel.collect_amount.toString());
+        }
+      });
+    });
+    return {
+      pickupRequest: totalPickupRequest,
+      parcel: totalParcel,
+      collectAmount: totalCollectAmount,
+    };
   }
 }

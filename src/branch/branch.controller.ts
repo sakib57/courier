@@ -113,21 +113,26 @@ export class BranchController {
     return this.branchService.assignReturn(assignDto);
   }
 
-      // Cancel for pickup
-      @Post('cancel/pickup')
-      cancelPickup(@Body(ValidationPipe) assignDto: AssignDto) {
-        return this.branchService.cancelPickup(assignDto);
-      }
-  
-      // Cancel for delivery
-    @Post('cancel/delivery')
-    cancelDelivery(@Body(ValidationPipe) assignDto: AssignDto) {
-      return this.branchService.cancelDelivery(assignDto);
-  
-    }
+  // Cancel for pickup
+  @Post('cancel/pickup')
+  cancelPickup(@Body(ValidationPipe) assignDto: AssignDto) {
+    return this.branchService.cancelPickup(assignDto);
+  }
+
+  // Cancel for delivery
+  @Post('cancel/delivery')
+  cancelDelivery(@Body(ValidationPipe) assignDto: AssignDto) {
+    return this.branchService.cancelDelivery(assignDto);
+  }
 
   @Get('count')
   branchCount() {
     return this.branchService.count();
+  }
+
+  // Dashboard
+  @Get('dashboard/:branch_id')
+  dashboard(@Param() param: any, @Query() query: any) {
+    return this.branchService.branchDashboard(param, query);
   }
 }
