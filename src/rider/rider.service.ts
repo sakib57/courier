@@ -248,11 +248,11 @@ export class RiderService {
     }
 
     totalParcel.map((tParcel: any) => {
-      tParcel.parcel.map((parcel: any) => {
-        if (parcel.delivery_status == DeliveryStatus.DELIVERED) {
-          totalCollectAmount += parseFloat(parcel.collect_amount.toString());
-        }
-      });
+      if (tParcel.parcel.delivery_status == DeliveryStatus.DELIVERED) {
+        totalCollectAmount += parseFloat(
+          tParcel.parcel.collect_amount.toString(),
+        );
+      }
     });
     return {
       pickupRequest: totalPickupRequest,
